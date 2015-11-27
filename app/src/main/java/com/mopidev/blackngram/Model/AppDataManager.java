@@ -66,4 +66,17 @@ public class AppDataManager {
             listener.onSuccess(currentUser);
 
     }
+
+    public User getCurrentUser(Context context) {
+        User currentUser = new User();
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
+
+        currentUser.Username = settings.getString(PREFERENCE_NAME_USERNAME,null);
+        currentUser.Password = settings.getString(PREFERENCE_NAME_PASSWORD,"");
+
+        if( currentUser.Username != null )
+            return currentUser;
+        else
+            return null;
+    }
 }

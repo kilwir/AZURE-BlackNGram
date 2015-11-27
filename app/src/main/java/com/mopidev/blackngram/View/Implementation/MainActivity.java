@@ -3,7 +3,9 @@ package com.mopidev.blackngram.View.Implementation;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.R;
 
 import butterknife.ButterKnife;
@@ -16,6 +18,8 @@ import icepick.Icepick;
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,11 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Icepick.restoreInstanceState(this,savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
     @Override
-
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this,outState);
