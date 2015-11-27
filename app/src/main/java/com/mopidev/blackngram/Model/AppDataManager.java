@@ -59,10 +59,10 @@ public class AppDataManager {
         User currentUser = new User();
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
 
-        currentUser.Username = settings.getString(PREFERENCE_NAME_USERNAME,"");
+        currentUser.Username = settings.getString(PREFERENCE_NAME_USERNAME,null);
         currentUser.Password = settings.getString(PREFERENCE_NAME_PASSWORD,"");
 
-        if( !currentUser.Username.equals("") )
+        if( currentUser.Username != null )
             listener.onSuccess(currentUser);
 
     }
