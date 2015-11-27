@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.hugo'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.mopidev.blackngram"
+        minSdkVersion 21
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {url "https://clojars.org/repo/"}
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile     'frankiesardo:icepick:3.1.0'
+    provided    'frankiesardo:icepick-processor:3.1.0'
+
+    testCompile 'junit:junit:4.12'
+    compile     'com.android.support:appcompat-v7:23.1.1'
+    compile     'com.android.support:cardview-v7:23.1.1'
+    compile     'com.android.support:recyclerview-v7:23.1.1'
+    compile     'com.jakewharton:butterknife:7.0.1'
+    compile     'com.squareup.picasso:picasso:2.5.2'
+}
