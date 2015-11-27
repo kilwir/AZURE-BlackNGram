@@ -44,7 +44,6 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
     }
 
     @Override
-    @DebugLog
     public void onSuccess(User currentUser) {
         Log.d(TAG,"onSuccess");
         loginView.hideProgress();

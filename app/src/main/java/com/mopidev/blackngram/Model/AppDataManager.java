@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
 
 import java.net.ContentHandler;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bad Boys Team
@@ -78,5 +81,22 @@ public class AppDataManager {
             return currentUser;
         else
             return null;
+    }
+
+    public void loadPictures(final OnLoadPicturesFinishedListener listener){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                List<Picture> pictureList = new ArrayList<Picture>();
+
+                for(int i = 0;i < 10; i++) {
+                    Picture picture = new Picture();
+                    picture.Name = "New York";
+                    pictureList.add(picture);
+                }
+
+                listener.onSuccess(pictureList);
+            }
+        }, 1000);
     }
 }
