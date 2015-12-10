@@ -41,8 +41,7 @@ public class AppDataManager {
 
     public void login(final String username, final Context context,final OnLoginFinishedListener loginFinishedListener) {
 
-
-        /*Handler handler = new Handler();
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override public void run() {
                 if(username.equals("admin")){
@@ -55,9 +54,17 @@ public class AppDataManager {
                 else
                     loginFinishedListener.onError();
             }
-        }, 1000);*/
+        }, 1000);
+    }
 
+    public void logout(Context context){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
 
+        editor.remove(PREFERENCE_NAME_USERNAME);
+        editor.remove(PREFERENCE_NAME_PASSWORD);
+
+        editor.apply();
     }
 
     private void saveCurrentUser(User user,Context context) {
