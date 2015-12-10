@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.Adapter;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,9 +25,11 @@ import hugo.weaving.DebugLog;
 public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureViewHolder> {
 
     private List<Picture> pictureList;
+    private Context context;
 
-    public PictureAdapter(List<Picture> pictureList){
+    public PictureAdapter(List<Picture> pictureList,Context context){
         this.pictureList = pictureList;
+        this.context = context;
     }
 
     @Override
@@ -40,8 +43,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     @Override
     public void onBindViewHolder(PictureViewHolder holder, int position) {
         Picture picture = pictureList.get(position);
+        String by = context.getString(R.string.by);
         holder.Name.setText(picture.Name);
         holder.Image.setImageResource(R.drawable.nyc_black_and_white);
+        holder.Author.setText(by + picture.UserOwner);
     }
 
     @Override
@@ -53,11 +58,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
         protected TextView  Name;
         protected ImageView Image;
+        protected TextView  Author;
 
         public PictureViewHolder(View itemView) {
             super(itemView);
             Name = (TextView) itemView.findViewById(R.id.pictureName);
             Image = (ImageView) itemView.findViewById(R.id.picture);
+            Author  = (TextView) itemView.findViewById(R.id.pictureAuthor);
         }
 
     }

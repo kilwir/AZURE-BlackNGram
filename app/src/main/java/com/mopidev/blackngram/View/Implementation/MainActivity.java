@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showPicturesList(List<Picture> pictureList) {
-        PictureAdapter adapter = new PictureAdapter(pictureList);
+        PictureAdapter adapter = new PictureAdapter(pictureList,getApplicationContext());
         recyclerView.setAdapter(adapter);
     }
 

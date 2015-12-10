@@ -92,6 +92,7 @@ public class AppDataManager {
                 for(int i = 0;i < 10; i++) {
                     Picture picture = new Picture();
                     picture.Name = "New York";
+                    picture.UserOwner = "Kiwis";
                     pictureList.add(picture);
                 }
 

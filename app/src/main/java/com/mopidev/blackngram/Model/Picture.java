@@ -6,4 +6,5 @@ package com.mopidev.blackngram.Model;
  */
 public class Picture {
     public String Name;
+    public String UserOwner;
 }

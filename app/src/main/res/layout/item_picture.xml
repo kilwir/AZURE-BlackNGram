@@ -20,22 +20,32 @@
             android:elevation="3dp"
             android:layout_marginBottom="10dp"
             />
-
-        <TextView
-            android:id="@+id/pictureName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="26sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            />
-
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/pictureName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="26sp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
+            <TextView
+                android:id="@+id/pictureAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/colorPrimary"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="2dp">
             <Button
                 android:id="@+id/share"
                 style="?android:attr/borderlessButtonStyle"
