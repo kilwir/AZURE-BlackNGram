@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.arasthel.asyncjob.AsyncJob;
 import com.mopidev.blackngram.Adapter.PictureAdapter;
+import com.mopidev.blackngram.Listener.OnItemClickListener;
 import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.Picture;
 import com.mopidev.blackngram.Presenter.Implementation.MainPresenterImpl;
@@ -87,8 +89,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showPicturesList(List<Picture> pictureList) {
-        PictureAdapter adapter = new PictureAdapter(pictureList,getApplicationContext());
+        PictureAdapter adapter = new PictureAdapter(getApplicationContext(),pictureList);
+        adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(TAG,"Item Click : " + position);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Log.d(TAG,"Item Long Click : " + position);
+    }
 }

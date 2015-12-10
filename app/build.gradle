@@ -47,5 +47,7 @@ dependencies {
     compile     'com.android.support:recyclerview-v7:23.1.1'
     compile     'com.jakewharton:butterknife:7.0.1'
     compile     'com.squareup.picasso:picasso:2.5.2'
-    compile     'com.microsoft.azure:azure-mobile-services-android-sdk:+'
+    compile     'com.microsoft.azure.android:azure-storage-android:0.7.0@aar'
+    compile     'com.arasthel:asyncjob-library:1.0.3'
+    compile     'com.fasterxml.jackson.core:jackson-core:2.7.0-rc1'
 }

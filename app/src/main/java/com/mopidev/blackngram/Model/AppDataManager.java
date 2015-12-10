@@ -3,12 +3,19 @@ package com.mopidev.blackngram.Model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.util.Log;
 
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageUri;
+import com.microsoft.azure.storage.table.CloudTable;
+import com.microsoft.azure.storage.table.CloudTableClient;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
 
 import java.net.ContentHandler;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +24,8 @@ import java.util.List;
  * Created by remyjallan on 26/11/2015.
  */
 public class AppDataManager {
+
+    private static final String TAG = "AppDataManager";
 
     private static final String PREFERENCE_NAME = "PREFERENCE_BLACKNGRAM";
     private static final String PREFERENCE_NAME_USERNAME = PREFERENCE_NAME + "_USER";
@@ -30,9 +39,10 @@ public class AppDataManager {
 
     private AppDataManager() {}
 
-    public void login(final String username, final Context context,final OnLoginFinishedListener loginFinishedListener)
-    {
-        Handler handler = new Handler();
+    public void login(final String username, final Context context,final OnLoginFinishedListener loginFinishedListener) {
+
+
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override public void run() {
                 if(username.equals("admin")){
@@ -45,7 +55,9 @@ public class AppDataManager {
                 else
                     loginFinishedListener.onError();
             }
-        }, 1000);
+        }, 1000);*/
+
+
     }
 
     private void saveCurrentUser(User user,Context context) {
@@ -100,4 +112,5 @@ public class AppDataManager {
             }
         }, 1000);
     }
+
 }
