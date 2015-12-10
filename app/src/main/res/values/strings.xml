@@ -6,4 +6,6 @@
     <string name="contentDescriptionPicture">Image</string>
     <string name="Share">Share</string>
     <string name="by">"By "</string>
+    <string name="signin">Sign in</string>
+    <string name="password">Password</string>
 </resources>

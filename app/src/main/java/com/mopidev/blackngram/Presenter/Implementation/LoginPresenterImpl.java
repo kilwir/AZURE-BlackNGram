@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
+import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
 import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.User;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
@@ -15,7 +16,7 @@ import hugo.weaving.DebugLog;
  * Bad Boys Team
  * Created by remyjallan on 26/11/2015.
  */
-public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListener {
+public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListener,OnSigninFinishedListener {
 
     private static final String TAG = "LoginPresenterImpl";
 
@@ -26,9 +27,21 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
     }
 
     @Override
-    public void validateCredentials(String username,Context context) {
+    public void validateCredentials(String username,String password,Context context) {
         loginView.showProgress();
-        AppDataManager.getInstance().login(username, context, this);
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        AppDataManager.getInstance().login(user, context, this);
+    }
+
+    @Override
+    public void validateSignin(String username, String password, Context context) {
+        loginView.showProgress();
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        AppDataManager.getInstance().signIn(user,context,this);
     }
 
     @Override
@@ -37,18 +50,31 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
     }
 
     @Override
-    public void onError() {
+    public void onLoginError() {
         Log.d(TAG,"onError");
         loginView.hideProgress();
         loginView.SetError();
     }
 
     @Override
-    public void onSuccess(User currentUser) {
+    public void onLoginSuccess(User currentUser) {
         Log.d(TAG,"onSuccess");
         loginView.hideProgress();
         loginView.navigateToHome();
     }
 
 
+    @Override
+    public void onSigninError() {
+        Log.d(TAG,"onSigninError");
+        loginView.hideProgress();
+        loginView.SetError();
+    }
+
+    @Override
+    public void onSigninSuccess(User currentUser) {
+        Log.d(TAG,"onSigninSuccess");
+        loginView.hideProgress();
+        loginView.navigateToHome();
+    }
 }

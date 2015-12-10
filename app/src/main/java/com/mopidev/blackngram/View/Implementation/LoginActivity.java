@@ -29,6 +29,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Bind(R.id.username)
     public EditText username;
 
+    @Bind(R.id.password)
+    public EditText password;
+
     private LoginPresenter presenter;
 
     @Override
@@ -48,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this,outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
@@ -75,7 +78,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @OnClick(R.id.loginButton)
     public void loginButton(){
-        Log.d(TAG,"LoginButton Pressed");
-        this.presenter.validateCredentials(this.username.getText().toString(),getApplicationContext());
+        Log.d(TAG, "LoginButton Pressed");
+        this.presenter.validateCredentials(this.username.getText().toString(), this.password.getText().toString(), getApplicationContext());
+    }
+
+    @OnClick(R.id.signInButton)
+    public void signInButton() {
+        presenter.validateSignin(this.username.getText().toString(),this.password.getText().toString(),getApplicationContext());
     }
 }

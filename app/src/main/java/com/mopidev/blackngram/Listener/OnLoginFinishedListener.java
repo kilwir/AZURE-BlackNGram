@@ -8,7 +8,7 @@ import com.mopidev.blackngram.Model.User;
  */
 public interface OnLoginFinishedListener {
 
-    public void onError();
+    public void onLoginError();
 
-    public void onSuccess(User currentUser);
+    public void onLoginSuccess(User currentUser);
 }

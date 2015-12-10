@@ -7,6 +7,7 @@ import android.content.Context;
  * Created by remyjallan on 26/11/2015.
  */
 public interface LoginPresenter {
-    void validateCredentials(String username,Context context);
+    void validateCredentials(String username,String password,Context context);
+    void validateSignin(String username,String password,Context context);
     void checkCurrentUser(Context context);
 }
