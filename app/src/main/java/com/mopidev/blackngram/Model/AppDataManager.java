@@ -6,11 +6,14 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
+import com.google.common.collect.Iterables;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageUri;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
 import com.microsoft.azure.storage.table.TableOperation;
+import com.microsoft.azure.storage.table.TableQuery;
+import com.mopidev.blackngram.Listener.OnCheckUserExistListener;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
@@ -20,6 +23,7 @@ import java.net.ContentHandler;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +63,8 @@ public class AppDataManager {
 
                     cloudTable.execute(insertNewUser);
 
+                    saveCurrentUser(user,context);
+
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override
                         public void doInUIThread() {
@@ -70,9 +76,44 @@ public class AppDataManager {
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override
                         public void doInUIThread() {
-                            listener.onSigninError();
+                            listener.onSigninError("Error connection");
                         }
                     });
+                }
+            }
+        });
+    }
+
+    private void checkUserExist(final User user,final OnCheckUserExistListener listener){
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+
+                    // Create the table client.
+                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
+
+                    // Create a cloud table object for the table.
+                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+
+                    String PartitionFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, user.getPartitionKey());
+                    String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
+
+                    String combinedFilter = TableQuery.combineFilters(PartitionFilter, UsernameFilter, TableQuery.Operators.AND);
+
+                    TableQuery<User> userQuery = TableQuery.from(User.class).where(combinedFilter);
+
+                    Iterator<User> userIterator = cloudTable.execute(userQuery).iterator();
+
+                    if(!userIterator.hasNext()) {
+                        listener.UserDoesNotExist();
+                    } else {
+                        listener.UserAlreadyExist();
+                    }
+                } catch(Exception e) {
+                    listener.CheckUserExistError("Connection Error");
                 }
             }
         });
