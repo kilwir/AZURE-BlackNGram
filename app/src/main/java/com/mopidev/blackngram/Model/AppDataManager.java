@@ -55,7 +55,7 @@ public class AppDataManager {
                 AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                     @Override
                     public void doInUIThread() {
-                        listener.onSigninError("User already exist");
+                        listener.onSigninError(ErrorCode.USER_ALREADY_EXIST);
                     }
                 });
             }
@@ -90,7 +90,7 @@ public class AppDataManager {
                             AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                                 @Override
                                 public void doInUIThread() {
-                                    listener.onSigninError("Error connection");
+                                    listener.onSigninError(ErrorCode.ERROR_CONNECTION);
                                 }
                             });
                         }
@@ -99,11 +99,11 @@ public class AppDataManager {
             }
 
             @Override
-            public void CheckUserExistError(final String errorMessage) {
+            public void CheckUserExistError(final int errorCode) {
                 AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                     @Override
                     public void doInUIThread() {
-                        listener.onSigninError(errorMessage);
+                        listener.onSigninError(errorCode);
                     }
                 });
             }
@@ -124,10 +124,11 @@ public class AppDataManager {
                     // Create a cloud table object for the table.
                     CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
 
-                    String PartitionFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, user.getPartitionKey());
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
+                    String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey",TableQuery.QueryComparisons.EQUAL,Constante.PartitionKey);
 
-                    String combinedFilter = TableQuery.combineFilters(PartitionFilter, UsernameFilter, TableQuery.Operators.AND);
+                    String combinedFilter = TableQuery.combineFilters(
+                            UsernameFilter, TableQuery.Operators.AND, PartitionKeyFilter);
 
                     TableQuery<User> userQuery = TableQuery.from(User.class).where(combinedFilter);
 
@@ -139,47 +140,66 @@ public class AppDataManager {
                         listener.UserAlreadyExist();
                     }
                 } catch(Exception e) {
-                    listener.CheckUserExistError("Connection Error");
+                    listener.CheckUserExistError(ErrorCode.ERROR_CONNECTION);
                 }
             }
         });
     }
 
-    public void login(final User user, final Context context,final OnLoginFinishedListener loginFinishedListener) {
-
-        /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                if(username.equals("admin")){
-                    User currentUser = new User();
-                    currentUser.Username = username;
-                    currentUser.Password = "";
-                    saveCurrentUser(currentUser,context);
-                    loginFinishedListener.onSuccess(currentUser);
-                }
-                else
-                    loginFinishedListener.onError();
-            }
-        }, 1000);*/
+    public void login(final User user, final Context context,final OnLoginFinishedListener listener) {
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
-                CloudStorageAccount storageAccount = null;
                 try {
-                    storageAccount = CloudStorageAccount.parse(Constante.getStorageConnectionString());
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+
                     // Create the table client.
                     CloudTableClient tableClient = storageAccount.createCloudTableClient();
 
                     // Create a cloud table object for the table.
                     CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
 
-                    TableOperation retrieveOperation =
-                            TableOperation.retrieve(Constante.PartitionKey, UUID.randomUUID().toString(),User.class);
+                    String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
+                    String PasswordFilter = TableQuery.generateFilterCondition("Password", TableQuery.QueryComparisons.EQUAL, user.getPassword());
+                    String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
 
+                    String combinedFilterCredential = TableQuery.combineFilters(
+                            UsernameFilter, TableQuery.Operators.AND, PasswordFilter);
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    String combinedFilter = TableQuery.combineFilters(combinedFilterCredential,TableQuery.Operators.AND,PartitionKeyFilter);
+
+                    Log.d(TAG,combinedFilter);
+
+                    TableQuery<User> userTableQuery = TableQuery.from(User.class).where(combinedFilter);
+
+                    Iterator<User> userIterator = cloudTable.execute(userTableQuery).iterator();
+
+                    if(userIterator.hasNext()) {
+                        final User currentUser = userIterator.next();
+                        saveCurrentUser(user,context);
+                        AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                            @Override
+                            public void doInUIThread() {
+                                listener.onLoginSuccess(currentUser);
+                            }
+                        });
+                    } else {
+                        AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                            @Override
+                            public void doInUIThread() {
+                                listener.onLoginError(ErrorCode.WRONG_CREDENTIAL);
+                            }
+                        });
+                    }
+                } catch(Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onLoginError(ErrorCode.ERROR_CONNECTION);
+                        }
+                    });
                 }
             }
         });

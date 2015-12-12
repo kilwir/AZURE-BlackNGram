@@ -5,9 +5,10 @@ package com.mopidev.blackngram.Model;
  * Created by remyjallan on 12/12/2015.
  */
 public class ErrorCode {
-    public static final int USER_ALREADY_EXIST = 0;
 
-    public static final int WRONG_CREDENTIAL = 1;
+    public static final int USER_ALREADY_EXIST  = 0;
+    public static final int WRONG_CREDENTIAL    = 1;
+    public static final int ERROR_CONNECTION    = 2;
 
     public static String getMessage(int code){
 
@@ -15,10 +16,13 @@ public class ErrorCode {
 
         switch (code) {
             case USER_ALREADY_EXIST :
-                message = "User already exist";
+                message = "Username already exist";
                 break;
             case WRONG_CREDENTIAL :
                 message = "Wrong username/password";
+                break;
+            case ERROR_CONNECTION :
+                message = "Error connection";
                 break;
         }
 

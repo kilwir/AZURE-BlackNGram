@@ -9,5 +9,5 @@ public interface OnCheckUserExistListener {
 
     void UserDoesNotExist();
 
-    void CheckUserExistError(String errorMessage);
+    void CheckUserExistError(int errorCode);
 }
