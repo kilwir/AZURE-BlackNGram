@@ -48,38 +48,64 @@ public class AppDataManager {
     private AppDataManager() {}
 
     public void signIn(final User user,final Context context,final OnSigninFinishedListener listener){
-        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+
+        this.checkUserExist(user, new OnCheckUserExistListener() {
             @Override
-            public void doOnBackground() {
-                try {
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+            public void UserAlreadyExist() {
+                AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                    @Override
+                    public void doInUIThread() {
+                        listener.onSigninError("User already exist");
+                    }
+                });
+            }
 
-                    cloudTable.createIfNotExists();
+            @Override
+            public void UserDoesNotExist() {
+                AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+                    @Override
+                    public void doOnBackground() {
+                        try {
+                            CloudStorageAccount storageAccount =
+                                    CloudStorageAccount.parse(Constante.getStorageConnectionString());
+                            CloudTableClient tableClient = storageAccount.createCloudTableClient();
+                            CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
 
-                    TableOperation insertNewUser = TableOperation.insert(user);
+                            cloudTable.createIfNotExists();
 
-                    cloudTable.execute(insertNewUser);
+                            TableOperation insertNewUser = TableOperation.insert(user);
 
-                    saveCurrentUser(user,context);
+                            cloudTable.execute(insertNewUser);
 
-                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
-                        @Override
-                        public void doInUIThread() {
-                            listener.onSigninSuccess(user);
+                            saveCurrentUser(user, context);
+
+                            AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                                @Override
+                                public void doInUIThread() {
+                                    listener.onSigninSuccess(user);
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.d(TAG, "Exception");
+                            AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                                @Override
+                                public void doInUIThread() {
+                                    listener.onSigninError("Error connection");
+                                }
+                            });
                         }
-                    });
-                } catch(Exception e) {
-                    Log.d(TAG, "Exception");
-                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
-                        @Override
-                        public void doInUIThread() {
-                            listener.onSigninError("Error connection");
-                        }
-                    });
-                }
+                    }
+                });
+            }
+
+            @Override
+            public void CheckUserExistError(final String errorMessage) {
+                AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                    @Override
+                    public void doInUIThread() {
+                        listener.onSigninError(errorMessage);
+                    }
+                });
             }
         });
     }

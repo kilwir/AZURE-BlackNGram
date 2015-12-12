@@ -6,6 +6,7 @@ import android.util.Log;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
 import com.mopidev.blackngram.Model.AppDataManager;
+import com.mopidev.blackngram.Model.ErrorCode;
 import com.mopidev.blackngram.Model.User;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
 import com.mopidev.blackngram.View.LoginView;
@@ -53,7 +54,7 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
     public void onLoginError() {
         Log.d(TAG,"onError");
         loginView.hideProgress();
-        loginView.SetError();
+        loginView.setError("");
     }
 
     @Override
@@ -65,10 +66,10 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
 
 
     @Override
-    public void onSigninError() {
+    public void onSigninError(int code) {
         Log.d(TAG,"onSigninError");
         loginView.hideProgress();
-        loginView.SetError();
+        loginView.setError(ErrorCode.getMessage(code));
     }
 
     @Override

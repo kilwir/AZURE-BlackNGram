@@ -9,7 +9,7 @@ public interface LoginView {
 
     void hideProgress();
 
-    void SetError();
+    void setError(String errorMessage);
 
     void navigateToHome();
 

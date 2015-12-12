@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.Listener;
 
+import com.mopidev.blackngram.Model.ErrorCode;
 import com.mopidev.blackngram.Model.User;
 
 /**
@@ -7,7 +8,7 @@ import com.mopidev.blackngram.Model.User;
  * Created by remyjallan on 10/12/2015.
  */
 public interface OnSigninFinishedListener {
-    public void onSigninError(String errorMessage);
+    public void onSigninError(int code);
 
     public void onSigninSuccess(User currentUser);
 }
