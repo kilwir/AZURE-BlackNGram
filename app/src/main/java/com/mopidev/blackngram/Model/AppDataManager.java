@@ -260,6 +260,9 @@ public class AppDataManager {
                     Picture picture = new Picture();
                     picture.Name = "New York";
                     picture.UserOwner = "Kiwis";
+
+                    picture.Like = i % 2 == 0;
+
                     pictureList.add(picture);
                 }
 

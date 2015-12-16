@@ -47,6 +47,14 @@
             android:orientation="horizontal"
             android:layout_marginTop="2dp">
             <Button
+                android:id="@+id/like"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Like"
+                android:textSize="16sp"
+                />
+            <Button
                 android:id="@+id/share"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"

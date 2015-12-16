@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.Listener;
 
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -9,4 +10,6 @@ import android.view.View;
 public interface OnItemClickListener {
     void onItemClick(View view, int position);
     void onItemLongClick(View view,int position);
+    void onShareItem(View view, int position);
+    void onLikeItem(View view, int position);
 }

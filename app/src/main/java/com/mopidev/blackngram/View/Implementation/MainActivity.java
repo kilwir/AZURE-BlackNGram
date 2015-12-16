@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -102,5 +103,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onItemLongClick(View view, int position) {
         Log.d(TAG,"Item Long Click : " + position);
+    }
+
+    @Override
+    public void onShareItem(View view, int position) {
+        Log.d(TAG,"onShareItem: " + position);
+    }
+
+    @Override
+    public void onLikeItem(View view, int position) {
+        Log.d(TAG,"onLikeItem: " + position);
     }
 }
