@@ -62,6 +62,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         holder.Author.setText(by + picture.getUserRowKey());
         Picasso.with(context)
                 .load(picture.getBlackImageURL())
+                .error(R.drawable.error_loading)
                 .into(holder.Image);
         /*if(picture.Like) {
             holder.Like.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));

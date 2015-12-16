@@ -2,6 +2,7 @@ package com.mopidev.blackngram.View.Implementation;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +33,12 @@ import icepick.Icepick;
  * Bad Boys Team
  * Created by remyjallan on 26/11/2015.
  */
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends AppCompatActivity implements MainView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "MainActivity";
+
+    @Bind(R.id.swipeRefreshLayout)
+    public SwipeRefreshLayout swipeToRefresh;
 
     @Bind(R.id.recyclerView)
     public RecyclerView recyclerView;
@@ -53,9 +57,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        presenter = new MainPresenterImpl(this);
-
         initRecyclerView();
+
+        swipeToRefresh.setOnRefreshListener(this);
+
+        presenter = new MainPresenterImpl(this);
 
         presenter.loadPictures(this);
     }
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void hideProgress() {
         progressLoadPicture.setVisibility(View.GONE);
+        swipeToRefresh.setRefreshing(false);
     }
 
     @Override
@@ -113,5 +120,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onLikeItem(View view, int position) {
         Log.d(TAG,"onLikeItem: " + position);
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.loadPictures(this);
     }
 }
