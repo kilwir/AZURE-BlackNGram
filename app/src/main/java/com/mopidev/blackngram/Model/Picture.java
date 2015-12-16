@@ -1,5 +1,7 @@
 package com.mopidev.blackngram.Model;
 
+import android.os.Parcelable;
+
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 import java.util.UUID;
@@ -8,7 +10,8 @@ import java.util.UUID;
  * Bad Boys Team
  * Created by remyjallan on 27/11/2015.
  */
-public class Picture extends TableServiceEntity {
+
+public class Picture extends TableServiceEntity{
 
     private String Name;
     private String UserRowKey;

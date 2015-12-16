@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".View.Implementation.MainActivity">
         </activity>
+        <activity android:name=".View.Implementation.FullScreenImageActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -10,4 +10,6 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
  */
 public interface MainPresenter {
     void loadPictures(Context context);
+
+    void pictureClick(int position);
 }

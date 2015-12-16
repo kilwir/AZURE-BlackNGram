@@ -9,6 +9,7 @@ import com.mopidev.blackngram.Model.Picture;
 import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.View.MainView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,8 +22,11 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
 
     private MainView mainView;
 
+    private List<Picture> mPictureList;
+
     public MainPresenterImpl(MainView view){
         this.mainView = view;
+        mPictureList = new ArrayList<>();
     }
 
     @Override
@@ -32,8 +36,14 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     }
 
     @Override
+    public void pictureClick(int position) {
+        mainView.navigateToFullScreen(mPictureList.get(position));
+    }
+
+    @Override
     public void onSuccess(List<Picture> pictures) {
         mainView.hideProgress();
+        mPictureList = pictures;
         mainView.showPicturesList(pictures);
     }
 

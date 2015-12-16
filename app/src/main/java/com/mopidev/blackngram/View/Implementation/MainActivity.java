@@ -1,6 +1,8 @@
 package com.mopidev.blackngram.View.Implementation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -96,6 +98,15 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
+    public void navigateToFullScreen(Picture picture) {
+        Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
+
+        fullScreen.putExtra("PictureGetBlackImageURL",picture.getBlackImageURL());
+
+        startActivity(fullScreen);
+    }
+
+    @Override
     public void showPicturesList(List<Picture> pictureList) {
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(),pictureList);
         adapter.setOnItemClickListener(this);
@@ -105,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Override
     public void onItemClick(View view, int position) {
         Log.d(TAG,"Item Click : " + position);
+        presenter.pictureClick(position);
     }
 
     @Override

@@ -18,5 +18,7 @@ public interface MainView extends OnItemClickListener{
 
     void SetError();
 
+    void navigateToFullScreen(Picture picture);
+
     void showPicturesList(List<Picture> pictureList);
 }
