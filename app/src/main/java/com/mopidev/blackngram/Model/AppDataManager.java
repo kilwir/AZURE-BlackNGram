@@ -38,6 +38,7 @@ public class AppDataManager {
     private static final String PREFERENCE_NAME = "PREFERENCE_BLACKNGRAM";
     private static final String PREFERENCE_NAME_USERNAME = PREFERENCE_NAME + "_USER";
     private static final String PREFERENCE_NAME_PASSWORD = PREFERENCE_NAME + "_PASSWORD";
+    private static final String PREFERENCE_NAME_ROWKEY = PREFERENCE_NAME + "_ROWKEY";
 
     private static AppDataManager ourInstance = new AppDataManager();
 
@@ -46,6 +47,10 @@ public class AppDataManager {
     }
 
     private AppDataManager() {}
+
+    /**
+     * Fonction Utilisateur
+     */
 
     public void signIn(final User user,final Context context,final OnSigninFinishedListener listener){
 
@@ -125,7 +130,7 @@ public class AppDataManager {
                     CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
-                    String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey",TableQuery.QueryComparisons.EQUAL,Constante.PartitionKey);
+                    String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
 
                     String combinedFilter = TableQuery.combineFilters(
                             UsernameFilter, TableQuery.Operators.AND, PartitionKeyFilter);
@@ -134,12 +139,12 @@ public class AppDataManager {
 
                     Iterator<User> userIterator = cloudTable.execute(userQuery).iterator();
 
-                    if(!userIterator.hasNext()) {
+                    if (!userIterator.hasNext()) {
                         listener.UserDoesNotExist();
                     } else {
                         listener.UserAlreadyExist();
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     listener.CheckUserExistError(ErrorCode.ERROR_CONNECTION);
                 }
             }
@@ -169,8 +174,6 @@ public class AppDataManager {
                             UsernameFilter, TableQuery.Operators.AND, PasswordFilter);
 
                     String combinedFilter = TableQuery.combineFilters(combinedFilterCredential,TableQuery.Operators.AND,PartitionKeyFilter);
-
-                    Log.d(TAG,combinedFilter);
 
                     TableQuery<User> userTableQuery = TableQuery.from(User.class).where(combinedFilter);
 
@@ -205,22 +208,13 @@ public class AppDataManager {
         });
     }
 
-    public void logout(Context context){
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-
-        editor.remove(PREFERENCE_NAME_USERNAME);
-        editor.remove(PREFERENCE_NAME_PASSWORD);
-
-        editor.apply();
-    }
-
     private void saveCurrentUser(User user,Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putString(PREFERENCE_NAME_USERNAME,user.Username);
-        editor.putString(PREFERENCE_NAME_PASSWORD,user.Password);
+        editor.putString(PREFERENCE_NAME_USERNAME,user.getUsername());
+        editor.putString(PREFERENCE_NAME_PASSWORD,user.getPassword());
+        editor.putString(PREFERENCE_NAME_ROWKEY,user.getRowKey());
 
         editor.apply();
     }
@@ -229,10 +223,11 @@ public class AppDataManager {
         User currentUser = new User();
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
 
-        currentUser.Username = settings.getString(PREFERENCE_NAME_USERNAME,null);
-        currentUser.Password = settings.getString(PREFERENCE_NAME_PASSWORD,"");
+        currentUser.setUsername(settings.getString(PREFERENCE_NAME_USERNAME,null));
+        currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
+        currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY,null));
 
-        if( currentUser.Username != null )
+        if( currentUser.getUsername() != null )
             listener.onLoginSuccess(currentUser);
 
     }
@@ -241,34 +236,83 @@ public class AppDataManager {
         User currentUser = new User();
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
 
-        currentUser.Username = settings.getString(PREFERENCE_NAME_USERNAME,null);
-        currentUser.Password = settings.getString(PREFERENCE_NAME_PASSWORD,"");
+        currentUser.setUsername(settings.getString(PREFERENCE_NAME_USERNAME, null));
+        currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
+        currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY, null));
 
-        if( currentUser.Username != null )
+        if( currentUser.getUsername() != null )
             return currentUser;
         else
             return null;
     }
 
-    public void loadPictures(final OnLoadPicturesFinishedListener listener){
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                List<Picture> pictureList = new ArrayList<Picture>();
+    public void logout(Context context){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
 
-                for(int i = 0;i < 10; i++) {
-                    Picture picture = new Picture();
-                    picture.Name = "New York";
-                    picture.UserOwner = "Kiwis";
+        editor.remove(PREFERENCE_NAME_USERNAME);
+        editor.remove(PREFERENCE_NAME_PASSWORD);
+        editor.remove(PREFERENCE_NAME_ROWKEY);
 
-                    picture.Like = i % 2 == 0;
+        editor.apply();
+    }
 
-                    pictureList.add(picture);
+    /**
+     * Fin Fonction Utilisateur
+     */
+
+
+    public void loadAllPictures(Context context,final OnLoadPicturesFinishedListener listener){
+        final User currentUser = AppDataManager.getInstance().getCurrentUser(context);
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+
+                    // Create the table client.
+                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
+
+                    // Create a cloud table object for the table.
+                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTablePicture);
+
+                    String RowKeyFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.NOT_EQUAL, currentUser.getRowKey());
+                    String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
+
+                    String combinedFilter = TableQuery.combineFilters(
+                            RowKeyFilter, TableQuery.Operators.AND, BlackUrlFilter);
+
+                    TableQuery<Picture> pictureTableQuery = TableQuery.from(Picture.class).where(combinedFilter);
+
+                    Iterator<Picture> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
+
+                    final List<Picture> pictureList = new ArrayList<>();
+
+                    while(pictureIterator.hasNext()) {
+                        pictureList.add(pictureIterator.next());
+                    }
+
+
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onSuccess(pictureList);
+                        }
+                    });
+
+                } catch(Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onError();
+                        }
+                    });
                 }
-
-                listener.onSuccess(pictureList);
             }
-        }, 1000);
+        });
     }
 
 }

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         initRecyclerView();
 
-        presenter.loadPictures();
+        presenter.loadPictures(this);
     }
 
     @Override

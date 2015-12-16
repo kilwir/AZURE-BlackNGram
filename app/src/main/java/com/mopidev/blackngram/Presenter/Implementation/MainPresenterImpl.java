@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.Presenter.Implementation;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
@@ -25,9 +26,9 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     }
 
     @Override
-    public void loadPictures() {
+    public void loadPictures(Context context) {
         mainView.showProgress();
-        AppDataManager.getInstance().loadPictures(this);
+        AppDataManager.getInstance().loadAllPictures(context,this);
     }
 
     @Override

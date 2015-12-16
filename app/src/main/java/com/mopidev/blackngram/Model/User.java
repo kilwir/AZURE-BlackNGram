@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 public class User extends TableServiceEntity{
 
-    String Username;
-    String Password;
+    String mUsername;
+    String mPassword;
 
     public User(){
         this.partitionKey = Constante.PartitionKey;
@@ -20,19 +20,19 @@ public class User extends TableServiceEntity{
     }
 
     public String getPassword() {
-        return Password;
+        return mPassword;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        mPassword = password;
     }
 
     public String getUsername() {
-        return Username;
+        return mUsername;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        mUsername = username;
     }
 
 }

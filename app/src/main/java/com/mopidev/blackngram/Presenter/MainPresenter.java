@@ -1,5 +1,7 @@
 package com.mopidev.blackngram.Presenter;
 
+import android.content.Context;
+
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 
 /**
@@ -7,5 +9,5 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
  * Created by remyjallan on 27/11/2015.
  */
 public interface MainPresenter {
-    void loadPictures();
+    void loadPictures(Context context);
 }

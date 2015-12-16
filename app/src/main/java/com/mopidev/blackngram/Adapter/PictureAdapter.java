@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.mopidev.blackngram.Listener.OnItemClickListener;
 import com.mopidev.blackngram.Model.Picture;
 import com.mopidev.blackngram.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -56,21 +57,23 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
         final Picture picture = pictureList.get(position);
         String by = context.getString(R.string.by);
-        holder.Name.setText(picture.Name);
-        holder.Image.setImageResource(R.drawable.nyc_black_and_white);
-        holder.Author.setText(by + picture.UserOwner);
-
-        if(picture.Like) {
+        holder.Name.setText(picture.getName());
+        //holder.Image.setImageResource(R.drawable.nyc_black_and_white);
+        holder.Author.setText(by + picture.getUserRowKey());
+        Picasso.with(context)
+                .load(picture.getBlackImageURL())
+                .into(holder.Image);
+        /*if(picture.Like) {
             holder.Like.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-        }
+        }*/
 
         if(this.itemClickListener != null)
             holder.setOnClickListener(this.itemClickListener);
 
-        holder.Like.setOnClickListener(new View.OnClickListener() {
+        /*holder.Like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                picture.Like = !picture.Like;
+                picture. = !picture.Like;
                 int newColor;
 
                 if(picture.Like) {
@@ -90,7 +93,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
             public void onClick(View view) {
                 holder.clickListener.onShareItem(holder.Share,position);
             }
-        });
+        });*/
     }
 
     @Override

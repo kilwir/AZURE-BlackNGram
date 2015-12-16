@@ -16,6 +16,7 @@ public class Constante {
      * Table Name
      */
     public static String NameTableUser = "User";
+    public static String NameTablePicture = "UserImage";
 
     public static String getStorageConnectionString() {
         return  "DefaultEndpointsProtocol=http;" +
