@@ -275,9 +275,9 @@ public class AppDataManager {
         User currentUser = new User();
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
 
-        currentUser.setUsername(settings.getString(PREFERENCE_NAME_USERNAME,null));
+        currentUser.setUsername(settings.getString(PREFERENCE_NAME_USERNAME, null));
         currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
-        currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY,null));
+        currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY, null));
 
         if( currentUser.getUsername() != null )
             listener.onLoginSuccess(currentUser);
@@ -343,7 +343,7 @@ public class AppDataManager {
 
                     final List<Picture> pictureList = new ArrayList<>();
 
-                    while(pictureIterator.hasNext()) {
+                    while (pictureIterator.hasNext()) {
                         pictureList.add(pictureIterator.next());
                     }
 
@@ -355,13 +355,83 @@ public class AppDataManager {
                         }
                     });
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override
                         public void doInUIThread() {
                             listener.onError();
                         }
                     });
+                }
+            }
+        });
+    }
+
+    public void addFavorite(Picture picture,Context context){
+
+        User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
+
+        final Favorite newFavorite = new Favorite();
+        newFavorite.setPictureId(picture);
+        newFavorite.setUserId(currentUser);
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
+                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableFavorite);
+
+                    cloudTable.createIfNotExists();
+
+                    TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
+
+                    cloudTable.execute(insertNewFavorite);
+
+                    Log.d(TAG,"Favorite Added");
+
+                } catch( Exception e) {
+                    Log.d(TAG,"Exception addFavorite");
+                }
+            }
+        });
+    }
+
+    public void loadAllFavorite(Context context) {
+        final User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+
+                    // Create the table client.
+                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
+
+                    // Create a cloud table object for the table.
+                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableFavorite);
+
+                    String RowKeyFilter = TableQuery.generateFilterCondition("UserId", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
+
+
+                    TableQuery<Favorite> pictureTableQuery = TableQuery.from(Favorite.class).where(RowKeyFilter);
+
+                    Iterator<Favorite> favoriteIterator = cloudTable.execute(pictureTableQuery).iterator();
+
+                    final List<Favorite> favoriteList = new ArrayList<>();
+
+                    while (favoriteIterator.hasNext()) {
+                        favoriteList.add(favoriteIterator.next());
+                    }
+
+
+                } catch (Exception e) {
+                    Log.d(TAG,"loadAllFavorite");
                 }
             }
         });

@@ -85,10 +85,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         if(this.itemClickListener != null)
             holder.setOnClickListener(this.itemClickListener);
 
-        /*holder.Like.setOnClickListener(new View.OnClickListener() {
+        holder.Like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                picture. = !picture.Like;
+                /*picture. = !picture.Like;
                 int newColor;
 
                 if(picture.Like) {
@@ -99,10 +99,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
                 holder.Like.setBackgroundColor(newColor);
 
-                holder.clickListener.onLikeItem(holder.Like,position);
+                holder.clickListener.onLikeItem(holder.Like,position);*/
+
+                AppDataManager.getInstance().addFavorite(picture,context);
             }
         });
 
+        /*
         holder.Share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
