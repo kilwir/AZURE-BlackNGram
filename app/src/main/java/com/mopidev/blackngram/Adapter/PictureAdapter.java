@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mopidev.blackngram.Listener.OnItemClickListener;
+import com.mopidev.blackngram.Listener.OnLoadUserListener;
+import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.Picture;
+import com.mopidev.blackngram.Model.User;
 import com.mopidev.blackngram.R;
 import com.squareup.picasso.Picasso;
 
@@ -56,14 +59,25 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     @Override
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
         final Picture picture = pictureList.get(position);
-        String by = context.getString(R.string.by);
+        final String by = context.getString(R.string.by);
         holder.Name.setText(picture.getName());
-        //holder.Image.setImageResource(R.drawable.nyc_black_and_white);
-        holder.Author.setText(by + picture.getUserRowKey());
         Picasso.with(context)
                 .load(picture.getBlackImageURL())
                 .error(R.drawable.error_loading)
                 .into(holder.Image);
+
+        AppDataManager.getInstance().getUserById(picture.getUserRowKey(), new OnLoadUserListener() {
+            @Override
+            public void OnSuccess(User user) {
+                holder.Author.setText(by + user.getUsername());
+            }
+
+            @Override
+            public void OnError() {
+                holder.Author.setText(by + "Anonymous");
+            }
+        });
+
         /*if(picture.Like) {
             holder.Like.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         }*/

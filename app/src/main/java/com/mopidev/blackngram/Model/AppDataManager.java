@@ -15,6 +15,7 @@ import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.mopidev.blackngram.Listener.OnCheckUserExistListener;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
+import com.mopidev.blackngram.Listener.OnLoadUserListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
@@ -201,6 +202,57 @@ public class AppDataManager {
                         @Override
                         public void doInUIThread() {
                             listener.onLoginError(ErrorCode.ERROR_CONNECTION);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public void getUserById(final String userId,final OnLoadUserListener listener) {
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+                    CloudStorageAccount storageAccount =
+                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
+
+                    // Create the table client.
+                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
+
+                    // Create a cloud table object for the table.
+                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+
+                    String RowKeyFilter = TableQuery.generateFilterCondition("RowKey",TableQuery.QueryComparisons.EQUAL,userId);
+                    String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
+
+                    String combinedFilter = TableQuery.combineFilters(
+                            RowKeyFilter, TableQuery.Operators.AND, PartitionKeyFilter);
+
+                    TableQuery<User> userQuery = TableQuery.from(User.class).where(combinedFilter);
+
+                    final Iterator<User> userIterator = cloudTable.execute(userQuery).iterator();
+
+                    if(userIterator.hasNext()) {
+                        AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                            @Override
+                            public void doInUIThread() {
+                                listener.OnSuccess(userIterator.next());
+                            }
+                        });
+                    }else {
+                        AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                            @Override
+                            public void doInUIThread() {
+                                listener.OnError();
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.OnError();
                         }
                     });
                 }
