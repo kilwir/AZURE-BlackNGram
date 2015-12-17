@@ -182,7 +182,7 @@ public class AppDataManager {
 
                     if(userIterator.hasNext()) {
                         final User currentUser = userIterator.next();
-                        saveCurrentUser(user,context);
+                        saveCurrentUser(currentUser,context);
                         AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                             @Override
                             public void doInUIThread() {
@@ -389,8 +389,8 @@ public class AppDataManager {
                     TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
 
                     cloudTable.execute(insertNewFavorite);
-
                     Log.d(TAG,"Favorite Added");
+
 
                 } catch( Exception e) {
                     Log.d(TAG,"Exception addFavorite");

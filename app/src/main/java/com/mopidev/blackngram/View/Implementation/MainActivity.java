@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,6 +22,7 @@ import com.mopidev.blackngram.Listener.OnItemClickListener;
 import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.Picture;
 import com.mopidev.blackngram.Presenter.Implementation.MainPresenterImpl;
+import com.mopidev.blackngram.Presenter.LoginPresenter;
 import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
@@ -63,15 +66,29 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
         swipeToRefresh.setOnRefreshListener(this);
 
-        presenter = new MainPresenterImpl(this);
+        presenter = new MainPresenterImpl(this,this);
 
-        presenter.loadPictures(this);
+        presenter.loadPictures();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        presenter.optionSelected(item.getItemId());
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -93,17 +110,22 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void SetError() {
+    public void setError() {
         Toast.makeText(getApplicationContext(),"Error load pictures",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void navigateToFullScreen(Picture picture) {
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
-
         fullScreen.putExtra("PictureGetBlackImageURL",picture.getBlackImageURL());
-
         startActivity(fullScreen);
+    }
+
+    @Override
+    public void navigateToLogin() {
+        Intent fullScreen = new Intent(this,LoginActivity.class);
+        startActivity(fullScreen);
+        finish();
     }
 
     @Override
@@ -136,6 +158,6 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Override
     public void onRefresh() {
-        presenter.loadPictures(this);
+        presenter.loadPictures();
     }
 }

@@ -9,7 +9,9 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
  * Created by remyjallan on 27/11/2015.
  */
 public interface MainPresenter {
-    void loadPictures(Context context);
+    void loadPictures();
 
     void pictureClick(int position);
+
+    void optionSelected(int id);
 }
