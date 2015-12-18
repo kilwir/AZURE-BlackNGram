@@ -72,12 +72,7 @@ public class AppDataManager {
                     @Override
                     public void doOnBackground() {
                         try {
-                            CloudStorageAccount storageAccount =
-                                    CloudStorageAccount.parse(Constante.getStorageConnectionString());
-                            CloudTableClient tableClient = storageAccount.createCloudTableClient();
-                            CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
-
-                            cloudTable.createIfNotExists();
+                            CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,true);
 
                             TableOperation insertNewUser = TableOperation.insert(user);
 
@@ -121,14 +116,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-
-                    // Create the table client.
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-                    // Create a cloud table object for the table.
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
@@ -158,14 +146,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-
-                    // Create the table client.
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-                    // Create a cloud table object for the table.
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
                     String PasswordFilter = TableQuery.generateFilterCondition("Password", TableQuery.QueryComparisons.EQUAL, user.getPassword());
@@ -214,14 +195,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-
-                    // Create the table client.
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-                    // Create a cloud table object for the table.
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableUser);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("RowKey",TableQuery.QueryComparisons.EQUAL,userId);
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
@@ -322,14 +296,7 @@ public class AppDataManager {
             public void doOnBackground() {
                 try {
 
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-
-                    // Create the table client.
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-                    // Create a cloud table object for the table.
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTablePicture);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture, false);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, currentUser.getRowKey());
                     String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
@@ -379,12 +346,8 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableFavorite);
 
-                    cloudTable.createIfNotExists();
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, true);
 
                     TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
 
@@ -406,15 +369,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-
-                    CloudStorageAccount storageAccount =
-                            CloudStorageAccount.parse(Constante.getStorageConnectionString());
-
-                    // Create the table client.
-                    CloudTableClient tableClient = storageAccount.createCloudTableClient();
-
-                    // Create a cloud table object for the table.
-                    CloudTable cloudTable = tableClient.getTableReference(Constante.NameTableFavorite);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserId", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
 
