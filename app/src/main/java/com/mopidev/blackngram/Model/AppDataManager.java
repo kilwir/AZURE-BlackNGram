@@ -331,7 +331,7 @@ public class AppDataManager {
                     // Create a cloud table object for the table.
                     CloudTable cloudTable = tableClient.getTableReference(Constante.NameTablePicture);
 
-                    String RowKeyFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.NOT_EQUAL, currentUser.getRowKey());
+                    String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, currentUser.getRowKey());
                     String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
 
                     String combinedFilter = TableQuery.combineFilters(
@@ -371,9 +371,9 @@ public class AppDataManager {
 
         User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
 
-        final Favorite newFavorite = new Favorite();
-        newFavorite.setPictureId(picture);
-        newFavorite.setUserId(currentUser);
+        final UserFavorite newFavorite = new UserFavorite();
+        newFavorite.setUserImageRowKey(picture);
+        newFavorite.setUserRowKey(currentUser);
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
@@ -419,11 +419,11 @@ public class AppDataManager {
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserId", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
 
 
-                    TableQuery<Favorite> pictureTableQuery = TableQuery.from(Favorite.class).where(RowKeyFilter);
+                    TableQuery<UserFavorite> pictureTableQuery = TableQuery.from(UserFavorite.class).where(RowKeyFilter);
 
-                    Iterator<Favorite> favoriteIterator = cloudTable.execute(pictureTableQuery).iterator();
+                    Iterator<UserFavorite> favoriteIterator = cloudTable.execute(pictureTableQuery).iterator();
 
-                    final List<Favorite> favoriteList = new ArrayList<>();
+                    final List<UserFavorite> favoriteList = new ArrayList<>();
 
                     while (favoriteIterator.hasNext()) {
                         favoriteList.add(favoriteIterator.next());
