@@ -2,15 +2,10 @@ package com.mopidev.blackngram.Model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
-import com.google.common.collect.Iterables;
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageUri;
 import com.microsoft.azure.storage.table.CloudTable;
-import com.microsoft.azure.storage.table.CloudTableClient;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.mopidev.blackngram.Listener.OnCheckUserExistListener;
@@ -18,15 +13,10 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoadUserListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
-import com.mopidev.blackngram.Presenter.LoginPresenter;
 
-import java.net.ContentHandler;
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Bad Boys Team
@@ -304,21 +294,21 @@ public class AppDataManager {
                     String combinedFilter = TableQuery.combineFilters(
                             RowKeyFilter, TableQuery.Operators.AND, BlackUrlFilter);
 
-                    TableQuery<Picture> pictureTableQuery = TableQuery.from(Picture.class).where(combinedFilter);
+                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(combinedFilter);
 
-                    Iterator<Picture> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
+                    Iterator<UserImage> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
 
-                    final List<Picture> pictureList = new ArrayList<>();
+                    final List<UserImage> userImageList = new ArrayList<>();
 
                     while (pictureIterator.hasNext()) {
-                        pictureList.add(pictureIterator.next());
+                        userImageList.add(pictureIterator.next());
                     }
 
 
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override
                         public void doInUIThread() {
-                            listener.onSuccess(pictureList);
+                            listener.onSuccess(userImageList);
                         }
                     });
 
@@ -334,12 +324,12 @@ public class AppDataManager {
         });
     }
 
-    public void addFavorite(Picture picture,Context context){
+    public void addFavorite(UserImage userImage,Context context){
 
         User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
 
         final UserFavorite newFavorite = new UserFavorite();
-        newFavorite.setUserImageRowKey(picture);
+        newFavorite.setUserImageRowKey(userImage);
         newFavorite.setUserRowKey(currentUser);
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {

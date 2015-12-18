@@ -33,8 +33,8 @@ public class UserFavorite extends TableServiceEntity {
         mUserImageRowKey = pictureId;
     }
 
-    public void setUserImageRowKey(Picture picture) {
-        this.mUserImageRowKey = picture.getRowKey();
+    public void setUserImageRowKey(UserImage userImage) {
+        this.mUserImageRowKey = userImage.getRowKey();
     }
 
     public void setUserRowKey(User user) {

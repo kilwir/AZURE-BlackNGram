@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Model.AppDataManager;
-import com.mopidev.blackngram.Model.Picture;
+import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
@@ -24,12 +24,12 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     private MainView mMainView;
     private Context mContext;
 
-    private List<Picture> mPictureList;
+    private List<UserImage> mUserImageList;
 
     public MainPresenterImpl(MainView view,Context context){
         this.mMainView = view;
         mContext = context;
-        mPictureList = new ArrayList<>();
+        mUserImageList = new ArrayList<>();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
 
     @Override
     public void pictureClick(int position) {
-        mMainView.navigateToFullScreen(mPictureList.get(position));
+        mMainView.navigateToFullScreen(mUserImageList.get(position));
     }
 
     @Override
@@ -56,10 +56,10 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     }
 
     @Override
-    public void onSuccess(List<Picture> pictures) {
+    public void onSuccess(List<UserImage> userImages) {
         mMainView.hideProgress();
-        mPictureList = pictures;
-        mMainView.showPicturesList(pictures);
+        mUserImageList = userImages;
+        mMainView.showPicturesList(userImages);
     }
 
     @Override

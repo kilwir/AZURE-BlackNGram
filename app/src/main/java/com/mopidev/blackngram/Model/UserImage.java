@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by remyjallan on 27/11/2015.
  */
 
-public class Picture extends TableServiceEntity{
+public class UserImage extends TableServiceEntity{
 
     private String Name;
     private String UserRowKey;
@@ -20,7 +20,7 @@ public class Picture extends TableServiceEntity{
     private String BlackImageURL;
     private String BlackThumbnailURL;
 
-    public Picture() {
+    public UserImage() {
         this.partitionKey = Constante.PartitionKey;
         this.rowKey = UUID.randomUUID().toString();
     }

@@ -1,7 +1,7 @@
 package com.mopidev.blackngram.View;
 
 import com.mopidev.blackngram.Listener.OnItemClickListener;
-import com.mopidev.blackngram.Model.Picture;
+import com.mopidev.blackngram.Model.UserImage;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ public interface MainView extends OnItemClickListener{
 
     void setError();
 
-    void navigateToFullScreen(Picture picture);
+    void navigateToFullScreen(UserImage userImage);
 
     void navigateToLogin();
 
-    void showPicturesList(List<Picture> pictureList);
+    void showPicturesList(List<UserImage> userImageList);
 }

@@ -2,8 +2,6 @@ package com.mopidev.blackngram.View.Implementation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,18 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.arasthel.asyncjob.AsyncJob;
 import com.mopidev.blackngram.Adapter.PictureAdapter;
-import com.mopidev.blackngram.Listener.OnItemClickListener;
-import com.mopidev.blackngram.Model.AppDataManager;
-import com.mopidev.blackngram.Model.Picture;
+import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.Implementation.MainPresenterImpl;
-import com.mopidev.blackngram.Presenter.LoginPresenter;
 import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
@@ -31,7 +24,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import hugo.weaving.DebugLog;
 import icepick.Icepick;
 
 /**
@@ -115,9 +107,9 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void navigateToFullScreen(Picture picture) {
+    public void navigateToFullScreen(UserImage userImage) {
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
-        fullScreen.putExtra("PictureGetBlackImageURL",picture.getBlackImageURL());
+        fullScreen.putExtra("PictureGetBlackImageURL", userImage.getBlackImageURL());
         startActivity(fullScreen);
     }
 
@@ -129,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void showPicturesList(List<Picture> pictureList) {
-        PictureAdapter adapter = new PictureAdapter(getApplicationContext(),pictureList);
+    public void showPicturesList(List<UserImage> userImageList) {
+        PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImageList);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
     }

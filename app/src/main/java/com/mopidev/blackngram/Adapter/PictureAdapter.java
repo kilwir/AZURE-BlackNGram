@@ -1,15 +1,8 @@
 package com.mopidev.blackngram.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.nfc.Tag;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,12 +12,11 @@ import android.widget.TextView;
 import com.mopidev.blackngram.Listener.OnItemClickListener;
 import com.mopidev.blackngram.Listener.OnLoadUserListener;
 import com.mopidev.blackngram.Model.AppDataManager;
-import com.mopidev.blackngram.Model.Picture;
+import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Model.User;
 import com.mopidev.blackngram.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,12 +27,12 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
     private static final String TAG = "PictureAdapter";
 
-    private List<Picture> pictureList;
+    private List<UserImage> mUserImageList;
     private Context context;
     private OnItemClickListener itemClickListener;
 
-    public PictureAdapter(Context context,List<Picture> pictureList){
-        this.pictureList = pictureList;
+    public PictureAdapter(Context context,List<UserImage> userImageList){
+        this.mUserImageList = userImageList;
         this.context = context;
     }
 
@@ -58,15 +50,15 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
     @Override
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
-        final Picture picture = pictureList.get(position);
+        final UserImage userImage = mUserImageList.get(position);
         final String by = context.getString(R.string.by);
-        holder.Name.setText(picture.getName());
+        holder.Name.setText(userImage.getName());
         Picasso.with(context)
-                .load(picture.getBlackImageURL())
+                .load(userImage.getBlackImageURL())
                 .error(R.drawable.error_loading)
                 .into(holder.Image);
 
-        AppDataManager.getInstance().getUserById(picture.getUserRowKey(), new OnLoadUserListener() {
+        AppDataManager.getInstance().getUserById(userImage.getUserRowKey(), new OnLoadUserListener() {
             @Override
             public void OnSuccess(User user) {
                 holder.Author.setText(by + user.getUsername());
@@ -101,7 +93,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
                 holder.clickListener.onLikeItem(holder.Like,position);*/
 
-                AppDataManager.getInstance().addFavorite(picture,context);
+                AppDataManager.getInstance().addFavorite(userImage,context);
             }
         });
 
@@ -116,7 +108,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
     @Override
     public int getItemCount() {
-        return pictureList.size();
+        return mUserImageList.size();
     }
 
     class PictureViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
