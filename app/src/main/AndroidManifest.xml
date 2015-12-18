@@ -17,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Implementation.MainActivity">
+        <activity android:name=".View.Implementation.MainActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         </activity>
         <activity android:name=".View.Implementation.FullScreenImageActivity">
         </activity>

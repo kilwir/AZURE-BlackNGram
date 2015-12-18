@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Bind(R.id.progressLoadPicture)
     public ProgressBar progressLoadPicture;
 
+    @Bind(R.id.toolbar)
+    public Toolbar mToolbar;
+
     private MainPresenter presenter;
 
     @Override
@@ -55,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         initRecyclerView();
+
+        setSupportActionBar(mToolbar);
 
         swipeToRefresh.setOnRefreshListener(this);
 
