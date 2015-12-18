@@ -12,6 +12,5 @@ import com.mopidev.blackngram.Model.UserImage;
 public interface OnItemClickListener {
     void onItemClick(View view, int position);
     void onItemLongClick(View view,int position);
-    void onShareItem(View view, int position);
     void onLikeItem(View view, UserImage image);
 }

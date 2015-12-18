@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,7 +73,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         });
 
         if(userImage.IsFavorite) {
-            holder.Like.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            holder.Like.setBackgroundResource(R.mipmap.ic_star_black_24dp);
         }
 
         if(this.itemClickListener != null)
@@ -81,29 +82,21 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         holder.Like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int newColor;
+                int newIcon;
 
-                holder.clickListener.onLikeItem(holder.Like,userImage);
+                holder.clickListener.onLikeItem(holder.Like, userImage);
 
-                if(userImage.IsFavorite){
-                    newColor = context.getResources().getColor(R.color.cardview_light_background);
+                if (userImage.IsFavorite){
+                    newIcon = R.mipmap.ic_star_border_black_24dp;
                     userImage.IsFavorite = false;
                 } else {
-                    newColor = context.getResources().getColor(R.color.colorAccent);
+                    newIcon = R.mipmap.ic_star_black_24dp;
                     userImage.IsFavorite = true;
                 }
 
-                holder.Like.setBackgroundColor(newColor);
+                holder.Like.setBackgroundResource(newIcon);
             }
         });
-
-        /*
-        holder.Share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.clickListener.onShareItem(holder.Share,position);
-            }
-        });*/
     }
 
     @Override
@@ -117,8 +110,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         protected TextView  Name;
         protected ImageView Image;
         protected TextView  Author;
-        protected Button Share;
-        protected Button Like;
+        protected ImageButton Like;
         protected OnItemClickListener clickListener;
 
         public PictureViewHolder(View itemView) {
@@ -126,8 +118,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
             Name = (TextView) itemView.findViewById(R.id.pictureName);
             Image = (ImageView) itemView.findViewById(R.id.picture);
             Author  = (TextView) itemView.findViewById(R.id.pictureAuthor);
-            Share = (Button) itemView.findViewById(R.id.share);
-            Like = (Button) itemView.findViewById(R.id.like);
+            Like = (ImageButton) itemView.findViewById(R.id.like);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
