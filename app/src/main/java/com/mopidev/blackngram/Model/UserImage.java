@@ -13,7 +13,6 @@ import java.util.UUID;
 
 public class UserImage extends TableServiceEntity{
 
-    private String Name;
     private String UserRowKey;
     private String ImageURL;
     private String ThumbnailURL;
@@ -34,14 +33,6 @@ public class UserImage extends TableServiceEntity{
 
     public void setBlackThumbnailURL(String blackThumbnailURL) {
         BlackThumbnailURL = blackThumbnailURL;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
     }
 
     public String getUserRowKey() {

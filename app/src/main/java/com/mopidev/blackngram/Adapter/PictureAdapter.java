@@ -54,7 +54,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
         final UserImage userImage = mUserImageList.get(position);
         final String by = context.getString(R.string.by);
-        holder.Name.setText(userImage.getName());
+
         Picasso.with(context)
                 .load(userImage.getBlackImageURL())
                 .error(R.drawable.error_loading)
@@ -73,7 +73,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         });
 
         if(userImage.IsFavorite) {
-            holder.Like.setBackgroundResource(R.mipmap.ic_star_black_24dp);
+            holder.Like.setBackgroundResource(R.drawable.ic_heart);
         }
 
         if(this.itemClickListener != null)
@@ -87,10 +87,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
                 holder.clickListener.onLikeItem(holder.Like, userImage);
 
                 if (userImage.IsFavorite){
-                    newIcon = R.mipmap.ic_star_border_black_24dp;
+                    newIcon = R.drawable.ic_empty_heart;
                     userImage.IsFavorite = false;
                 } else {
-                    newIcon = R.mipmap.ic_star_black_24dp;
+                    newIcon = R.drawable.ic_heart;
                     userImage.IsFavorite = true;
                 }
 
@@ -106,8 +106,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
     class PictureViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener
     {
-
-        protected TextView  Name;
         protected ImageView Image;
         protected TextView  Author;
         protected ImageButton Like;
@@ -115,7 +113,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
         public PictureViewHolder(View itemView) {
             super(itemView);
-            Name = (TextView) itemView.findViewById(R.id.pictureName);
             Image = (ImageView) itemView.findViewById(R.id.picture);
             Author  = (TextView) itemView.findViewById(R.id.pictureAuthor);
             Like = (ImageButton) itemView.findViewById(R.id.like);
