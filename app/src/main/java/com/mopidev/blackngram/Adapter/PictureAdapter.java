@@ -2,6 +2,7 @@ package com.mopidev.blackngram.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +71,9 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
             }
         });
 
-        /*if(picture.Like) {
+        if(userImage.IsFavorite) {
             holder.Like.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
-        }*/
+        }
 
         if(this.itemClickListener != null)
             holder.setOnClickListener(this.itemClickListener);
@@ -80,20 +81,19 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         holder.Like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*picture. = !picture.Like;
                 int newColor;
 
-                if(picture.Like) {
-                    newColor = context.getResources().getColor(R.color.colorAccent);
-                } else {
+                holder.clickListener.onLikeItem(holder.Like,userImage);
+
+                if(userImage.IsFavorite){
                     newColor = context.getResources().getColor(R.color.cardview_light_background);
+                    userImage.IsFavorite = false;
+                } else {
+                    newColor = context.getResources().getColor(R.color.colorAccent);
+                    userImage.IsFavorite = true;
                 }
 
                 holder.Like.setBackgroundColor(newColor);
-
-                holder.clickListener.onLikeItem(holder.Like,position);*/
-
-                AppDataManager.getInstance().addFavorite(userImage,context);
             }
         });
 

@@ -20,9 +20,12 @@ public class UserImage extends TableServiceEntity{
     private String BlackImageURL;
     private String BlackThumbnailURL;
 
+    public Boolean IsFavorite;
+
     public UserImage() {
         this.partitionKey = Constante.PartitionKey;
         this.rowKey = UUID.randomUUID().toString();
+        this.IsFavorite = false;
     }
 
     public String getBlackThumbnailURL() {

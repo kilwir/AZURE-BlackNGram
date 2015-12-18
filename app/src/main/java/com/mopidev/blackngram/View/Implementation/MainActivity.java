@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void onLikeItem(View view, int position) {
-        Log.d(TAG,"onLikeItem: " + position);
+    public void onLikeItem(View view, UserImage image) {
+        presenter.likePicture(image);
     }
 
     @Override

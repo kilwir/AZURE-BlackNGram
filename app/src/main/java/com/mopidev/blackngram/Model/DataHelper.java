@@ -23,7 +23,7 @@ public class DataHelper {
         CloudTableClient tableClient = storageAccount.createCloudTableClient();
 
         // Create a cloud table object for the table.
-        CloudTable cloudTable = tableClient.getTableReference(Constante.NameTablePicture);
+        CloudTable cloudTable = tableClient.getTableReference(tableName);
 
         if(createIfNotExist){
             cloudTable.createIfNotExists();

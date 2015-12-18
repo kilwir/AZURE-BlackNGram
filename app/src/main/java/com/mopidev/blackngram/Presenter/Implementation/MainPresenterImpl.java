@@ -39,6 +39,15 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     }
 
     @Override
+    public void likePicture(UserImage image) {
+        if(!image.IsFavorite){
+            AppDataManager.getInstance().addFavorite(image,mContext);
+        } else {
+            AppDataManager.getInstance().deleteFavorite(image,mContext);
+        }
+    }
+
+    @Override
     public void pictureClick(int position) {
         mMainView.navigateToFullScreen(mUserImageList.get(position));
     }

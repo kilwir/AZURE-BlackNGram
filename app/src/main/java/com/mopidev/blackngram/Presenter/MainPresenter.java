@@ -3,6 +3,7 @@ package com.mopidev.blackngram.Presenter;
 import android.content.Context;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
+import com.mopidev.blackngram.Model.UserImage;
 
 /**
  * Bad Boys Team
@@ -10,6 +11,8 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
  */
 public interface MainPresenter {
     void loadPictures();
+
+    void likePicture(UserImage image);
 
     void pictureClick(int position);
 

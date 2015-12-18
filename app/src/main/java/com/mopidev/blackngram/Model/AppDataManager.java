@@ -62,7 +62,7 @@ public class AppDataManager {
                     @Override
                     public void doOnBackground() {
                         try {
-                            CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,true);
+                            CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, true);
 
                             TableOperation insertNewUser = TableOperation.insert(user);
 
@@ -106,7 +106,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, false);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
@@ -185,9 +185,9 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, false);
 
-                    String RowKeyFilter = TableQuery.generateFilterCondition("RowKey",TableQuery.QueryComparisons.EQUAL,userId);
+                    String RowKeyFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, userId);
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
 
                     String combinedFilter = TableQuery.combineFilters(
@@ -197,14 +197,14 @@ public class AppDataManager {
 
                     final Iterator<User> userIterator = cloudTable.execute(userQuery).iterator();
 
-                    if(userIterator.hasNext()) {
+                    if (userIterator.hasNext()) {
                         AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                             @Override
                             public void doInUIThread() {
                                 listener.OnSuccess(userIterator.next());
                             }
                         });
-                    }else {
+                    } else {
                         AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                             @Override
                             public void doInUIThread() {
@@ -229,8 +229,8 @@ public class AppDataManager {
         SharedPreferences.Editor editor = settings.edit();
 
         editor.putString(PREFERENCE_NAME_USERNAME,user.getUsername());
-        editor.putString(PREFERENCE_NAME_PASSWORD,user.getPassword());
-        editor.putString(PREFERENCE_NAME_ROWKEY,user.getRowKey());
+        editor.putString(PREFERENCE_NAME_PASSWORD, user.getPassword());
+        editor.putString(PREFERENCE_NAME_ROWKEY, user.getRowKey());
 
         editor.apply();
     }
@@ -300,8 +300,28 @@ public class AppDataManager {
 
                     final List<UserImage> userImageList = new ArrayList<>();
 
+                    CloudTable cloudTableFavorite = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
+
                     while (pictureIterator.hasNext()) {
-                        userImageList.add(pictureIterator.next());
+
+                        UserImage currentImage = pictureIterator.next();
+
+                        //userImageList.add(pictureIterator.next());
+
+                        RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
+                        String UserImageFilter = TableQuery.generateFilterCondition("UserImageRowKey", TableQuery.QueryComparisons.EQUAL, currentImage.getRowKey());
+
+                        combinedFilter = TableQuery.combineFilters(RowKeyFilter, TableQuery.Operators.AND, UserImageFilter);
+
+                        TableQuery<UserFavorite> favoritetableQuery = TableQuery.from(UserFavorite.class).where(combinedFilter);
+
+                        Iterator<UserFavorite> favoriteIterator = cloudTableFavorite.execute(favoritetableQuery).iterator();
+
+                        if (favoriteIterator.hasNext()) {
+                            currentImage.IsFavorite = true;
+                        }
+
+                        userImageList.add(currentImage);
                     }
 
 
@@ -332,21 +352,55 @@ public class AppDataManager {
         newFavorite.setUserImageRowKey(userImage);
         newFavorite.setUserRowKey(currentUser);
 
+        if(!userImage.IsFavorite) {
+            AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+                @Override
+                public void doOnBackground() {
+                    try {
+
+                        CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, true);
+
+                        TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
+
+                        cloudTable.execute(insertNewFavorite);
+                        Log.d(TAG, "Favorite Added");
+                    } catch( Exception e) {
+                        Log.d(TAG, "Exception addFavorite");
+                    }
+                }
+            });
+        }
+    }
+
+    public void deleteFavorite(final UserImage userImage,Context context){
+
+        final User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
+
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
                 try {
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
+                    //TableOperation deleteFavorite = TableOperation.delete(userImage.Favorite);
 
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, true);
+                    String UserFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
+                    String UserImageFilter = TableQuery.generateFilterCondition("UserImageRowKey", TableQuery.QueryComparisons.EQUAL, userImage.getRowKey());
 
-                    TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
+                    String combinedFilter = TableQuery.combineFilters(UserFilter, TableQuery.Operators.AND, UserImageFilter);
 
-                    cloudTable.execute(insertNewFavorite);
-                    Log.d(TAG,"Favorite Added");
+                    TableQuery<UserFavorite> favoriteTableQuery = TableQuery.from(UserFavorite.class).where(combinedFilter);
 
+                    Iterator<UserFavorite> favoriteIterator = cloudTable.execute(favoriteTableQuery).iterator();
 
-                } catch( Exception e) {
-                    Log.d(TAG,"Exception addFavorite");
+                    //While pour supprimer d'eventuel doublons
+                    while (favoriteIterator.hasNext()) {
+                        TableOperation delete = TableOperation.delete(favoriteIterator.next());
+                        cloudTable.execute(delete);
+                    }
+
+                    Log.d(TAG,"Favorite delete");
+                } catch (Exception e) {
+                    Log.d(TAG,e.getMessage());
                 }
             }
         });
