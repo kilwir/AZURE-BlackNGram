@@ -3,6 +3,7 @@ package com.mopidev.blackngram.View;
 import com.mopidev.blackngram.Listener.OnItemClickListener;
 import com.mopidev.blackngram.Model.UserImage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public interface MainView extends OnItemClickListener{
 
     void navigateToLogin();
 
-    void navigateToFavorite();
+    void navigateToFavorite(ArrayList<UserImage> favoriteImage);
 
     void showPicturesList(List<UserImage> userImageList);
 }

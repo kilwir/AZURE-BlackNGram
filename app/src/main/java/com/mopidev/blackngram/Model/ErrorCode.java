@@ -12,7 +12,7 @@ public class ErrorCode {
 
     public static String getMessage(int code){
 
-        String message  = null;
+        String message  = "";
 
         switch (code) {
             case USER_ALREADY_EXIST :

@@ -49,7 +49,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView 
 
         mPresenter = new FavoritePresenterImpl(this);
 
-        mPresenter.loadPictures();
+        mPresenter.loadPictures(getIntent());
 
     }
 

@@ -306,8 +306,6 @@ public class AppDataManager {
 
                         UserImage currentImage = pictureIterator.next();
 
-                        //userImageList.add(pictureIterator.next());
-
                         RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
                         String UserImageFilter = TableQuery.generateFilterCondition("UserImageRowKey", TableQuery.QueryComparisons.EQUAL, currentImage.getRowKey());
 
@@ -406,34 +404,5 @@ public class AppDataManager {
         });
     }
 
-    public void loadAllFavorite(Context context) {
-        final User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
-
-        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
-            @Override
-            public void doOnBackground() {
-                try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
-
-                    String RowKeyFilter = TableQuery.generateFilterCondition("UserId", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
-
-
-                    TableQuery<UserFavorite> pictureTableQuery = TableQuery.from(UserFavorite.class).where(RowKeyFilter);
-
-                    Iterator<UserFavorite> favoriteIterator = cloudTable.execute(pictureTableQuery).iterator();
-
-                    final List<UserFavorite> favoriteList = new ArrayList<>();
-
-                    while (favoriteIterator.hasNext()) {
-                        favoriteList.add(favoriteIterator.next());
-                    }
-
-
-                } catch (Exception e) {
-                    Log.d(TAG,"loadAllFavorite");
-                }
-            }
-        });
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.Model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
@@ -11,13 +12,13 @@ import java.util.UUID;
  * Created by remyjallan on 27/11/2015.
  */
 
-public class UserImage extends TableServiceEntity{
+public class UserImage extends TableServiceEntity implements Parcelable{
 
-    private String UserRowKey;
-    private String ImageURL;
-    private String ThumbnailURL;
-    private String BlackImageURL;
-    private String BlackThumbnailURL;
+    private String mUserRowKey;
+    private String mImageURL;
+    private String mThumbnailURL;
+    private String mBlackImageURL;
+    private String mBlackThumbnailURL;
 
     public Boolean IsFavorite;
 
@@ -27,44 +28,85 @@ public class UserImage extends TableServiceEntity{
         this.IsFavorite = false;
     }
 
+    //For Parcelable
+    private UserImage(Parcel in) {
+        this.rowKey = in.readString();
+        this.partitionKey = in.readString();
+        this.etag = in.readString();
+        mUserRowKey = in.readString();
+        mImageURL = in.readString();
+        mThumbnailURL = in.readString();
+        mBlackImageURL = in.readString();
+        mBlackThumbnailURL = in.readString();
+        IsFavorite = Boolean.parseBoolean(in.readString());
+    }
+
     public String getBlackThumbnailURL() {
-        return BlackThumbnailURL;
+        return mBlackThumbnailURL;
     }
 
     public void setBlackThumbnailURL(String blackThumbnailURL) {
-        BlackThumbnailURL = blackThumbnailURL;
+        mBlackThumbnailURL = blackThumbnailURL;
     }
 
     public String getUserRowKey() {
-        return UserRowKey;
+        return mUserRowKey;
     }
 
     public void setUserRowKey(String userRowKey) {
-        UserRowKey = userRowKey;
+        mUserRowKey = userRowKey;
     }
 
     public String getImageURL() {
-        return ImageURL;
+        return mImageURL;
     }
 
     public void setImageURL(String imageURL) {
-        ImageURL = imageURL;
+        mImageURL = imageURL;
     }
 
     public String getThumbnailURL() {
-        return ThumbnailURL;
+        return mThumbnailURL;
     }
 
     public void setThumbnailURL(String thumbnailURL) {
-        ThumbnailURL = thumbnailURL;
+        mThumbnailURL = thumbnailURL;
     }
 
     public String getBlackImageURL() {
-        return BlackImageURL;
+        return mBlackImageURL;
     }
 
     public void setBlackImageURL(String blackImageURL) {
-        BlackImageURL = blackImageURL;
+        mBlackImageURL = blackImageURL;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.rowKey);
+        parcel.writeString(this.partitionKey);
+        parcel.writeString(this.etag);
+        parcel.writeString(mUserRowKey);
+        parcel.writeString(mImageURL);
+        parcel.writeString(mThumbnailURL);
+        parcel.writeString(mBlackImageURL);
+        parcel.writeString(mBlackThumbnailURL);
+        parcel.writeString(Boolean.toString(IsFavorite));
+    }
+
+    public static final Parcelable.Creator<UserImage> CREATOR
+            = new Parcelable.Creator<UserImage>() {
+        public UserImage createFromParcel(Parcel in) {
+            return new UserImage(in);
+        }
+
+        public UserImage[] newArray(int size) {
+            return new UserImage[size];
+        }
+    };
 }

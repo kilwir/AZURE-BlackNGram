@@ -1,6 +1,7 @@
 package com.mopidev.blackngram.Presenter.Implementation;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
@@ -62,11 +63,22 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
                 break;
             case R.id.favorite:
                 Log.d(TAG,"FAVORITE VIEW");
-                mMainView.navigateToFavorite();
+                mMainView.navigateToFavorite(this.prepareNavigateToFavorite());
                 break;
             default:
                 break;
         }
+    }
+
+    private ArrayList<UserImage> prepareNavigateToFavorite(){
+        ArrayList<UserImage> list = new ArrayList<>();
+
+        for( UserImage userImage :mUserImageList){
+            if(userImage.IsFavorite)
+                list.add(userImage);
+        }
+
+        return list;
     }
 
     @Override

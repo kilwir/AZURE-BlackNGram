@@ -25,6 +25,7 @@ import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -136,8 +137,9 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void navigateToFavorite() {
+    public void navigateToFavorite(ArrayList<UserImage> favoriteImage) {
         Intent favoriteView = new Intent(this,FavoriteActivity.class);
+        favoriteView.putParcelableArrayListExtra("favoriteImage",favoriteImage);
         startActivity(favoriteView);
     }
 
