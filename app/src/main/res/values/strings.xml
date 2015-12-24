@@ -11,4 +11,7 @@
     <string name="Like">Like</string>
     <string name="logout">Log Out</string>
     <string name="favorite">Favorite</string>
+    <string name="LoginTitleActivity">Login</string>
+    <string name="MainTitleActivity">Black\'N\'Gram</string>
+    <string name="FavoriteTitleActivity">My Favorite</string>
 </resources>

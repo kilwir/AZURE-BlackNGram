@@ -10,18 +10,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/myApp">
-        <activity android:name=".View.Implementation.LoginActivity">
+        <activity android:name=".View.Implementation.LoginActivity"
+            android:label="@string/LoginTitleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Implementation.MainActivity">
+        <activity android:name=".View.Implementation.MainActivity"
+            android:label="@string/MainTitleActivity">
         </activity>
         <activity android:name=".View.Implementation.FullScreenImageActivity">
         </activity>
-        <activity android:name=".View.Implementation.FavoriteActivity">
+        <activity android:name=".View.Implementation.FavoriteActivity"
+            android:label="@string/FavoriteTitleActivity">
         </activity>
     </application>
 
