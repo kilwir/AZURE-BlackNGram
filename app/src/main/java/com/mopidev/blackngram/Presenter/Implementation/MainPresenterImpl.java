@@ -61,6 +61,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
                 break;
             case R.id.favorite:
                 Log.d(TAG,"FAVORITE VIEW");
+                mMainView.navigateToFavorite();
                 break;
             default:
                 break;

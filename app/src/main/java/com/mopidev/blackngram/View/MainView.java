@@ -22,5 +22,7 @@ public interface MainView extends OnItemClickListener{
 
     void navigateToLogin();
 
+    void navigateToFavorite();
+
     void showPicturesList(List<UserImage> userImageList);
 }

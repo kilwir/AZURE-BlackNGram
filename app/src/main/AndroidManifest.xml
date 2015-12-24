@@ -19,9 +19,10 @@
         </activity>
         <activity android:name=".View.Implementation.MainActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar">
-
         </activity>
         <activity android:name=".View.Implementation.FullScreenImageActivity">
+        </activity>
+        <activity android:name=".View.Implementation.FavoriteActivity">
         </activity>
     </application>
 

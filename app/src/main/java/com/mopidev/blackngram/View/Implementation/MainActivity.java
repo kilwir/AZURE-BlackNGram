@@ -121,9 +121,15 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Override
     public void navigateToLogin() {
-        Intent fullScreen = new Intent(this,LoginActivity.class);
-        startActivity(fullScreen);
+        Intent loginView = new Intent(this,LoginActivity.class);
+        startActivity(loginView);
         finish();
+    }
+
+    @Override
+    public void navigateToFavorite() {
+        Intent favoriteView = new Intent(this,FavoriteActivity.class);
+        startActivity(favoriteView);
     }
 
     @Override
