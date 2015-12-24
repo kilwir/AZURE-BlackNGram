@@ -10,7 +10,7 @@ import com.mopidev.blackngram.Model.UserImage;
  * Created by remyjallan on 27/11/2015.
  */
 public interface MainPresenter {
-    void loadPictures();
+    void loadPictures(Boolean isSwipeToRefresh);
 
     void likePicture(UserImage image);
 

@@ -1,7 +1,11 @@
 package com.mopidev.blackngram.View.Implementation;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +29,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import icepick.Icepick;
 
 /**
@@ -36,16 +41,19 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     public static final String TAG = "MainActivity";
 
     @Bind(R.id.swipeRefreshLayout)
-    public SwipeRefreshLayout swipeToRefresh;
+    public SwipeRefreshLayout mSwipeToRefresh;
 
     @Bind(R.id.recyclerView)
-    public RecyclerView recyclerView;
+    public RecyclerView mRecyclerView;
 
     @Bind(R.id.progressLoadPicture)
-    public ProgressBar progressLoadPicture;
+    public ProgressBar mProgressLoadPicture;
 
     @Bind(R.id.toolbar)
     public Toolbar mToolbar;
+
+    @Bind(R.id.fab_add)
+    public FloatingActionButton mAddPicture;
 
     private MainPresenter presenter;
 
@@ -62,11 +70,15 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
         setSupportActionBar(mToolbar);
 
-        swipeToRefresh.setOnRefreshListener(this);
+        mSwipeToRefresh.setOnRefreshListener(this);
+
+        int color = ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
+
+        mSwipeToRefresh.setColorSchemeColors(color);
 
         presenter = new MainPresenterImpl(this,this);
 
-        presenter.loadPictures();
+        presenter.loadPictures(false);
     }
 
     @Override
@@ -91,20 +103,20 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Override
     public void initRecyclerView() {
-        recyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
     public void showProgress() {
-        progressLoadPicture.setVisibility(View.VISIBLE);
+        mProgressLoadPicture.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        progressLoadPicture.setVisibility(View.GONE);
-        swipeToRefresh.setRefreshing(false);
+        mProgressLoadPicture.setVisibility(View.GONE);
+        mSwipeToRefresh.setRefreshing(false);
     }
 
     @Override
@@ -136,18 +148,18 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     public void showPicturesList(List<UserImage> userImageList) {
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImageList);
         adapter.setOnItemClickListener(this);
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d(TAG,"Item Click : " + position);
+        Log.d(TAG, "Item Click : " + position);
         presenter.pictureClick(position);
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
-        Log.d(TAG,"Item Long Click : " + position);
+        Log.d(TAG, "Item Long Click : " + position);
     }
 
     @Override
@@ -157,6 +169,11 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Override
     public void onRefresh() {
-        presenter.loadPictures();
+        presenter.loadPictures(true);
+    }
+
+    @OnClick(R.id.fab_add)
+    public void addPicture(View view){
+        Log.d(TAG,"Add picture");
     }
 }

@@ -26,6 +26,14 @@
             android:orientation="horizontal"
             android:layout_marginStart="10dp">
 
+            <ImageButton
+                android:id="@+id/like"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:text="@string/Like"
+                android:background="@drawable/ic_empty_heart"/>
+
             <TextView
                 android:id="@+id/pictureAuthor"
                 android:layout_width="wrap_content"
@@ -33,17 +41,7 @@
                 android:layout_marginStart="3dp"
                 android:textColor="@color/colorPrimary"
                 android:gravity="center_vertical"
-                android:textSize="18sp"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:id="@+id/like"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:text="@string/Like"
-                android:layout_marginEnd="3dp"
-                android:background="@drawable/ic_empty_heart"/>
+                android:textSize="18sp"/>
 
         </LinearLayout>
     </LinearLayout>

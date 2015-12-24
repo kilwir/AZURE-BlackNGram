@@ -33,8 +33,9 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     }
 
     @Override
-    public void loadPictures() {
-        mMainView.showProgress();
+    public void loadPictures(Boolean isSwipeToRefresh) {
+        if( !isSwipeToRefresh)
+            mMainView.showProgress();
         AppDataManager.getInstance().loadAllPictures(mContext,this);
     }
 

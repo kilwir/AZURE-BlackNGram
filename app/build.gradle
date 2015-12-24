@@ -50,4 +50,5 @@ dependencies {
     compile     'com.microsoft.azure.android:azure-storage-android:0.7.0@aar'
     compile     'com.arasthel:asyncjob-library:1.0.3'
     compile     'com.fasterxml.jackson.core:jackson-core:2.7.0-rc1'
+    compile     'com.android.support:design:23.1.1'
 }
