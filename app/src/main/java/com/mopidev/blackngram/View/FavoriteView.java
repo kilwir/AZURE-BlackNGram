@@ -5,4 +5,11 @@ package com.mopidev.blackngram.View;
  * Created by remyjallan on 18/12/2015.
  */
 public interface FavoriteView {
+    void showProgress();
+
+    void hideProgress();
+
+    void setError();
+
+    void initRecyclerView();
 }

@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Bind(R.id.toolbar)
     public Toolbar mToolbar;
 
-    @Bind(R.id.fab_add)
-    public FloatingActionButton mAddPicture;
-
     private MainPresenter presenter;
 
     @Override
@@ -153,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d(TAG, "Item Click : " + position);
         presenter.pictureClick(position);
     }
 

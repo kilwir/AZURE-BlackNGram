@@ -73,7 +73,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         });
 
         if(userImage.IsFavorite) {
-            holder.Like.setBackgroundResource(R.drawable.ic_heart);
+            holder.Like.setBackgroundResource(R.drawable.ic_heart_red);
         }
 
         if(this.itemClickListener != null)
@@ -90,7 +90,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
                     newIcon = R.drawable.ic_empty_heart;
                     userImage.IsFavorite = false;
                 } else {
-                    newIcon = R.drawable.ic_heart;
+                    newIcon = R.drawable.ic_heart_red;
                     userImage.IsFavorite = true;
                 }
 

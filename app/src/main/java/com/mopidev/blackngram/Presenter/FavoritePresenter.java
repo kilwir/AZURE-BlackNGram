@@ -5,4 +5,5 @@ package com.mopidev.blackngram.Presenter;
  * Created by remyjallan on 18/12/2015.
  */
 public interface FavoritePresenter {
+    void loadPictures();
 }
