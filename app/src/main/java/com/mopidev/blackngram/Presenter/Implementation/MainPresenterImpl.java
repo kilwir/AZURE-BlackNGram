@@ -85,7 +85,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     public void onSuccess(List<UserImage> userImages) {
         mMainView.hideProgress();
         mUserImageList = userImages;
-        mMainView.showPicturesList(userImages);
+        mMainView.showPictures(userImages);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.mopidev.blackngram.Presenter.Implementation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.FavoritePresenter;
 import com.mopidev.blackngram.R;
@@ -35,6 +37,14 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     public void loadPictures(Intent intent) {
         mView.showProgress();
         mUserImages = intent.getParcelableArrayListExtra("favoriteImage");
-        Log.d(TAG,"LoadPictures");
+        mView.showPictures(mUserImages);
+        mView.hideProgress();
+    }
+
+    @Override
+    public void deleteFavorite(Context context,UserImage userImage) {
+        AppDataManager.getInstance().deleteFavorite(userImage,context);
+        mUserImages.remove(userImage);
+        mView.showPictures(mUserImages);
     }
 }

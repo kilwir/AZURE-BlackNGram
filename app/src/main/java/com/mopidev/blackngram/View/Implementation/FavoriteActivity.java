@@ -6,14 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mopidev.blackngram.Adapter.PictureAdapter;
+import com.mopidev.blackngram.Listener.OnItemClickListener;
+import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.FavoritePresenter;
 import com.mopidev.blackngram.Presenter.Implementation.FavoritePresenterImpl;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.FavoriteView;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +29,9 @@ import icepick.Icepick;
  * Bad Boys Team
  * Created by remyjallan on 18/12/2015.
  */
-public class FavoriteActivity extends AppCompatActivity implements FavoriteView {
+public class FavoriteActivity extends AppCompatActivity implements FavoriteView, OnItemClickListener {
+
+    private static final String TAG = "FavoriteActivity";
 
     @Bind(R.id.toolbar)
     public Toolbar mToolbar;
@@ -46,6 +54,8 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView 
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         setSupportActionBar(mToolbar);
+
+        this.initRecyclerView();
 
         mPresenter = new FavoritePresenterImpl(this);
 
@@ -78,7 +88,30 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView 
     }
 
     @Override
+    public void showPictures(ArrayList<UserImage> userImages) {
+        Log.d(TAG,String.valueOf(userImages.size()));
+        PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImages);
+        adapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
     public void setError() {
         Toast.makeText(getApplicationContext(), "Error load pictures", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onLikeItem(View view, UserImage image) {
+        mPresenter.deleteFavorite(getApplicationContext(),image);
     }
 }

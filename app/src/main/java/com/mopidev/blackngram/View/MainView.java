@@ -25,5 +25,5 @@ public interface MainView extends OnItemClickListener{
 
     void navigateToFavorite(ArrayList<UserImage> favoriteImage);
 
-    void showPicturesList(List<UserImage> userImageList);
+    void showPictures(List<UserImage> userImageList);
 }

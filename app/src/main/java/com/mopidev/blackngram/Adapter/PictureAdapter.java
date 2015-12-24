@@ -30,16 +30,16 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     private static final String TAG = "PictureAdapter";
 
     private List<UserImage> mUserImageList;
-    private Context context;
-    private OnItemClickListener itemClickListener;
+    private Context mContext;
+    private OnItemClickListener mItemClickListener;
 
     public PictureAdapter(Context context,List<UserImage> userImageList){
         this.mUserImageList = userImageList;
-        this.context = context;
+        this.mContext = context;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
-        this.itemClickListener = listener;
+        this.mItemClickListener = listener;
     }
 
     @Override
@@ -53,9 +53,9 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     @Override
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
         final UserImage userImage = mUserImageList.get(position);
-        final String by = context.getString(R.string.by);
+        final String by = mContext.getString(R.string.by);
 
-        Picasso.with(context)
+        Picasso.with(mContext)
                 .load(userImage.getBlackImageURL())
                 .error(R.drawable.error_loading)
                 .into(holder.Image);
@@ -74,29 +74,33 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
         if(userImage.IsFavorite) {
             holder.Like.setBackgroundResource(R.drawable.ic_heart_red);
+        } else {
+            holder.Like.setBackgroundResource(R.drawable.ic_empty_heart);
         }
 
-        if(this.itemClickListener != null)
-            holder.setOnClickListener(this.itemClickListener);
+        if(this.mItemClickListener != null) {
+            holder.setOnClickListener(this.mItemClickListener);
 
-        holder.Like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int newIcon;
+            holder.Like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int newIcon;
 
-                holder.clickListener.onLikeItem(holder.Like, userImage);
+                    holder.clickListener.onLikeItem(holder.Like, userImage);
 
-                if (userImage.IsFavorite){
-                    newIcon = R.drawable.ic_empty_heart;
-                    userImage.IsFavorite = false;
-                } else {
-                    newIcon = R.drawable.ic_heart_red;
-                    userImage.IsFavorite = true;
+                    if (userImage.IsFavorite){
+                        newIcon = R.drawable.ic_empty_heart;
+                        userImage.IsFavorite = false;
+                    } else {
+                        newIcon = R.drawable.ic_heart_red;
+                        userImage.IsFavorite = true;
+                    }
+
+                    holder.Like.setBackgroundResource(newIcon);
                 }
+            });
+        }
 
-                holder.Like.setBackgroundResource(newIcon);
-            }
-        });
     }
 
     @Override
@@ -128,12 +132,14 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
         @Override
         public void onClick(View view) {
-            clickListener.onItemClick(view, getPosition());
+            if (clickListener != null)
+                clickListener.onItemClick(view, getPosition());
         }
 
         @Override
         public boolean onLongClick(View view) {
-            clickListener.onItemLongClick(view, getPosition());
+            if (clickListener != null)
+                clickListener.onItemLongClick(view, getPosition());
             return true;
         }
     }

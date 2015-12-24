@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void showPicturesList(List<UserImage> userImageList) {
+    public void showPictures(List<UserImage> userImageList) {
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImageList);
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
