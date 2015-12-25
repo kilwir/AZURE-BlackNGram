@@ -12,5 +12,5 @@ import com.mopidev.blackngram.Model.UserImage;
 public interface FavoritePresenter {
     void loadPictures(Intent intent);
 
-    void deleteFavorite(Context context,UserImage userImage);
+    void deleteFavorite(UserImage userImage);
 }

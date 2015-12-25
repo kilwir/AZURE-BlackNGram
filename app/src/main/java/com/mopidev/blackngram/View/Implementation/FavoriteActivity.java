@@ -112,6 +112,6 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
 
     @Override
     public void onLikeItem(View view, UserImage image) {
-        mPresenter.deleteFavorite(getApplicationContext(),image);
+        mPresenter.deleteFavorite(image);
     }
 }

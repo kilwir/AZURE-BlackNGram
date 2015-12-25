@@ -1,7 +1,11 @@
 package com.mopidev.blackngram.Presenter.Implementation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
@@ -12,6 +16,8 @@ import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,15 +44,15 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     public void loadPictures(Boolean isSwipeToRefresh) {
         if( !isSwipeToRefresh)
             mMainView.showProgress();
-        AppDataManager.getInstance().loadAllPictures(mContext,this);
+        AppDataManager.getInstance().loadAllPictures(this);
     }
 
     @Override
     public void likePicture(UserImage image) {
         if(!image.IsFavorite){
-            AppDataManager.getInstance().addFavorite(image,mContext);
+            AppDataManager.getInstance().addFavorite(image);
         } else {
-            AppDataManager.getInstance().deleteFavorite(image,mContext);
+            AppDataManager.getInstance().deleteFavorite(image);
         }
     }
 
@@ -57,7 +63,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
 
     @Override
     public void addPicture(Bitmap image) {
-        Log.d(TAG,"addPicture");
+        AppDataManager.getInstance().uploadPicture(image);
     }
 
     @Override

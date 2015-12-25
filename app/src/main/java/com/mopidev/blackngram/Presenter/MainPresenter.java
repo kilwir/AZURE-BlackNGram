@@ -1,6 +1,7 @@
 package com.mopidev.blackngram.Presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;

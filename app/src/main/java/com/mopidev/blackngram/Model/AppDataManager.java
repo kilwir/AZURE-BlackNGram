@@ -2,6 +2,7 @@ package com.mopidev.blackngram.Model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
@@ -32,6 +33,8 @@ public class AppDataManager {
     private static final String PREFERENCE_NAME_ROWKEY = PREFERENCE_NAME + "_ROWKEY";
 
     private static AppDataManager ourInstance = new AppDataManager();
+
+    private User mCurrentUser;
 
     public static AppDataManager getInstance() {
         return ourInstance;
@@ -233,6 +236,8 @@ public class AppDataManager {
         editor.putString(PREFERENCE_NAME_ROWKEY, user.getRowKey());
 
         editor.apply();
+
+        mCurrentUser = user;
     }
 
     public void getCurrentUser(Context context,OnLoginFinishedListener listener){
@@ -243,8 +248,10 @@ public class AppDataManager {
         currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
         currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY, null));
 
-        if( currentUser.getUsername() != null )
+        if( currentUser.getUsername() != null ){
             listener.onLoginSuccess(currentUser);
+            mCurrentUser = currentUser;
+        }
 
     }
 
@@ -256,10 +263,16 @@ public class AppDataManager {
         currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
         currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY, null));
 
-        if( currentUser.getUsername() != null )
+        if( currentUser.getUsername() != null ){
+            mCurrentUser = currentUser;
             return currentUser;
+        }
         else
             return null;
+    }
+
+    public User getCurrentUser(){
+        return mCurrentUser;
     }
 
     public void logout(Context context){
@@ -278,8 +291,7 @@ public class AppDataManager {
      */
 
 
-    public void loadAllPictures(Context context,final OnLoadPicturesFinishedListener listener){
-        final User currentUser = AppDataManager.getInstance().getCurrentUser(context);
+    public void loadAllPictures(final OnLoadPicturesFinishedListener listener){
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
@@ -288,7 +300,7 @@ public class AppDataManager {
 
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture, false);
 
-                    String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, currentUser.getRowKey());
+                    String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, mCurrentUser.getRowKey());
                     String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
 
                     String combinedFilter = TableQuery.combineFilters(
@@ -306,7 +318,7 @@ public class AppDataManager {
 
                         UserImage currentImage = pictureIterator.next();
 
-                        RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
+                        RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, mCurrentUser.getRowKey());
                         String UserImageFilter = TableQuery.generateFilterCondition("UserImageRowKey", TableQuery.QueryComparisons.EQUAL, currentImage.getRowKey());
 
                         combinedFilter = TableQuery.combineFilters(RowKeyFilter, TableQuery.Operators.AND, UserImageFilter);
@@ -342,13 +354,12 @@ public class AppDataManager {
         });
     }
 
-    public void addFavorite(UserImage userImage,Context context){
+    public void addFavorite(UserImage userImage){
 
-        User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
 
         final UserFavorite newFavorite = new UserFavorite();
         newFavorite.setUserImageRowKey(userImage);
-        newFavorite.setUserRowKey(currentUser);
+        newFavorite.setUserRowKey(mCurrentUser);
 
         if(!userImage.IsFavorite) {
             AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
@@ -370,9 +381,7 @@ public class AppDataManager {
         }
     }
 
-    public void deleteFavorite(final UserImage userImage,Context context){
-
-        final User currentUser =  AppDataManager.getInstance().getCurrentUser(context);
+    public void deleteFavorite(final UserImage userImage){
 
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
@@ -381,7 +390,7 @@ public class AppDataManager {
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
                     //TableOperation deleteFavorite = TableOperation.delete(userImage.Favorite);
 
-                    String UserFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, currentUser.getRowKey());
+                    String UserFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, mCurrentUser.getRowKey());
                     String UserImageFilter = TableQuery.generateFilterCondition("UserImageRowKey", TableQuery.QueryComparisons.EQUAL, userImage.getRowKey());
 
                     String combinedFilter = TableQuery.combineFilters(UserFilter, TableQuery.Operators.AND, UserImageFilter);
@@ -396,12 +405,15 @@ public class AppDataManager {
                         cloudTable.execute(delete);
                     }
 
-                    Log.d(TAG,"Favorite delete");
+                    Log.d(TAG, "Favorite delete");
                 } catch (Exception e) {
-                    Log.d(TAG,e.getMessage());
+                    Log.d(TAG, e.getMessage());
                 }
             }
         });
+    }
+
+    public void uploadPicture(Bitmap image){
     }
 
 

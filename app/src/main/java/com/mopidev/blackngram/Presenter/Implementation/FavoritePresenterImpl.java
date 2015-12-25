@@ -42,8 +42,8 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     }
 
     @Override
-    public void deleteFavorite(Context context,UserImage userImage) {
-        AppDataManager.getInstance().deleteFavorite(userImage,context);
+    public void deleteFavorite(UserImage userImage) {
+        AppDataManager.getInstance().deleteFavorite(userImage);
         mUserImages.remove(userImage);
         mView.showPictures(mUserImages);
     }
