@@ -19,6 +19,11 @@ public class Constante {
     public static String NameTablePicture = "UserImage";
     public static String NameTableFavorite = "UserFavorite";
 
+    /**
+     * Blob Name
+     */
+    public static String NameBlobImage = "images";
+
     public static String getStorageConnectionString() {
         return  "DefaultEndpointsProtocol=http;" +
                 "AccountName=" + AzureAccountName + ";" +

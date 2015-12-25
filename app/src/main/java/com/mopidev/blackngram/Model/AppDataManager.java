@@ -6,18 +6,25 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.mopidev.blackngram.Listener.OnCheckUserExistListener;
+import com.mopidev.blackngram.Listener.OnImageUploadedListener;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoadUserListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Bad Boys Team
@@ -65,7 +72,7 @@ public class AppDataManager {
                     @Override
                     public void doOnBackground() {
                         try {
-                            CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, true);
+                            CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser);
 
                             TableOperation insertNewUser = TableOperation.insert(user);
 
@@ -109,7 +116,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
@@ -139,7 +146,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser,false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser);
 
                     String UsernameFilter = TableQuery.generateFilterCondition("Username", TableQuery.QueryComparisons.EQUAL, user.getUsername());
                     String PasswordFilter = TableQuery.generateFilterCondition("Password", TableQuery.QueryComparisons.EQUAL, user.getPassword());
@@ -188,7 +195,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser, false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableUser);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, userId);
                     String PartitionKeyFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Constante.PartitionKey);
@@ -251,24 +258,10 @@ public class AppDataManager {
         if( currentUser.getUsername() != null ){
             listener.onLoginSuccess(currentUser);
             mCurrentUser = currentUser;
+        } else {
+            listener.onLoginError(ErrorCode.ERROR_CONNECTION);
         }
 
-    }
-
-    public User getCurrentUser(Context context) {
-        User currentUser = new User();
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
-
-        currentUser.setUsername(settings.getString(PREFERENCE_NAME_USERNAME, null));
-        currentUser.setPassword(settings.getString(PREFERENCE_NAME_PASSWORD, ""));
-        currentUser.setRowKey(settings.getString(PREFERENCE_NAME_ROWKEY, null));
-
-        if( currentUser.getUsername() != null ){
-            mCurrentUser = currentUser;
-            return currentUser;
-        }
-        else
-            return null;
     }
 
     public User getCurrentUser(){
@@ -298,7 +291,7 @@ public class AppDataManager {
             public void doOnBackground() {
                 try {
 
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture, false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, mCurrentUser.getRowKey());
                     String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
@@ -312,7 +305,7 @@ public class AppDataManager {
 
                     final List<UserImage> userImageList = new ArrayList<>();
 
-                    CloudTable cloudTableFavorite = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
+                    CloudTable cloudTableFavorite = DataHelper.getCloudTable(Constante.NameTableFavorite);
 
                     while (pictureIterator.hasNext()) {
 
@@ -367,7 +360,7 @@ public class AppDataManager {
                 public void doOnBackground() {
                     try {
 
-                        CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, true);
+                        CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite);
 
                         TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
 
@@ -387,7 +380,7 @@ public class AppDataManager {
             @Override
             public void doOnBackground() {
                 try {
-                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite, false);
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTableFavorite);
                     //TableOperation deleteFavorite = TableOperation.delete(userImage.Favorite);
 
                     String UserFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, mCurrentUser.getRowKey());
@@ -413,7 +406,45 @@ public class AppDataManager {
         });
     }
 
-    public void uploadPicture(Bitmap image){
+    public void uploadPicture(final Bitmap image, final OnImageUploadedListener listener){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        final InputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
+        final String namePicture = DataHelper.getPictureName();
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try{
+                    CloudBlobContainer container = DataHelper.getCloudBlob(Constante.NameBlobImage);
+                    CloudBlockBlob blob = container.getBlockBlobReference(namePicture);
+                    blob.upload(inputStream, image.getByteCount());
+
+                    UserImage newImage = new UserImage();
+                    newImage.setUserRowKey(getCurrentUser().getRowKey());
+                    newImage.setImageURL(blob.getStorageUri().getPrimaryUri().toString());
+
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
+                    TableOperation insertNewFavorite = TableOperation.insert(newImage);
+                    cloudTable.execute(insertNewFavorite);
+
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onImageUploaded();
+                        }
+                    });
+                } catch(Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onImageUploadError();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 

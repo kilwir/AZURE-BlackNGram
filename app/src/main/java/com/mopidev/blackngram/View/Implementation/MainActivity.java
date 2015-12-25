@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
-    public void setError() {
-        Toast.makeText(getApplicationContext(),"Error load pictures",Toast.LENGTH_SHORT).show();
+    public void setError(String message) {
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
                 imageStream = getContentResolver().openInputStream(selectedImage);
                 imageBitmap = BitmapFactory.decodeStream(imageStream);
             } catch (FileNotFoundException e) {
-                this.setError();
+                this.setError("Error upload image");
             }
         }
 

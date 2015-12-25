@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.mopidev.blackngram.Listener.OnImageUploadedListener;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Model.AppDataManager;
 import com.mopidev.blackngram.Model.UserImage;
@@ -25,7 +27,7 @@ import java.util.List;
  * Bad Boys Team
  * Created by remyjallan on 27/11/2015.
  */
-public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedListener {
+public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedListener, OnImageUploadedListener {
 
     private static final String TAG = "MainPresenterImpl";
 
@@ -63,7 +65,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
 
     @Override
     public void addPicture(Bitmap image) {
-        AppDataManager.getInstance().uploadPicture(image);
+        AppDataManager.getInstance().uploadPicture(image,this);
     }
 
     @Override
@@ -103,7 +105,17 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     @Override
     public void onError() {
         mMainView.hideProgress();
-        mMainView.setError();
+        mMainView.setError("On error as occurred");
         Log.d(TAG,"onError");
+    }
+
+    @Override
+    public void onImageUploaded() {
+        Log.d(TAG,"onImageUploaded");
+    }
+
+    @Override
+    public void onImageUploadError() {
+        mMainView.setError("Error upload image");
     }
 }
