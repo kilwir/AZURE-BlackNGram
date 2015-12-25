@@ -447,5 +447,15 @@ public class AppDataManager {
         });
     }
 
+    public void loadUserPictures(final OnLoadPicturesFinishedListener listener){
+        ArrayList<UserImage> userImages = new ArrayList<>();
+        userImages.add(new UserImage());
+        userImages.add(new UserImage());
+        userImages.add(new UserImage());
+        userImages.add(new UserImage());
+        userImages.add(new UserImage());
+        listener.onSuccess(userImages);
+    }
+
 
 }

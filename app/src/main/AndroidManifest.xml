@@ -29,6 +29,9 @@
         <activity android:name=".View.Implementation.FavoriteActivity"
             android:label="@string/FavoriteTitleActivity">
         </activity>
+        <activity android:name=".View.Implementation.ProfileActivity"
+                  android:label="@string/my_profile">
+        </activity>
     </application>
 
 </manifest>

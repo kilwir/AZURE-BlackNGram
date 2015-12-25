@@ -178,6 +178,12 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     }
 
     @Override
+    public void navigateToProfile() {
+        Intent intent = new Intent(this,ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public void showPictures(List<UserImage> userImageList) {
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImageList);
         adapter.setOnItemClickListener(this);

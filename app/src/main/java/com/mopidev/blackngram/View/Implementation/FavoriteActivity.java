@@ -97,7 +97,6 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
 
     @Override
     public void showPictures(ArrayList<UserImage> userImages) {
-        Log.d(TAG,String.valueOf(userImages.size()));
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImages);
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);

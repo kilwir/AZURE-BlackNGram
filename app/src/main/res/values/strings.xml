@@ -14,4 +14,6 @@
     <string name="LoginTitleActivity">Login</string>
     <string name="MainTitleActivity">Black\'N\'Gram</string>
     <string name="FavoriteTitleActivity">My Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="my_profile">My Profile</string>
 </resources>

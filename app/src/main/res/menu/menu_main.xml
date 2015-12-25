@@ -10,8 +10,13 @@
           android:icon="@drawable/ic_heart_white"
           app:showAsAction="ifRoom">
     </item>
-    <item android:id="@+id/logout"
+    <item android:id="@+id/profile"
           android:orderInCategory="100"
+          android:title="@string/profile"
+          app:showAsAction="never">
+    </item>
+    <item android:id="@+id/logout"
+          android:orderInCategory="200"
           android:title="@string/logout"
           app:showAsAction="never">
     </item>
