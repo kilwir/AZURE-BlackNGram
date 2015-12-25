@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.View.Implementation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,13 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
     }
 
     @Override
+    public void navigateToFullScreen(UserImage userImage) {
+        Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
+        fullScreen.putExtra("PictureGetBlackImageURL", userImage.getBlackImageURL());
+        startActivity(fullScreen);
+    }
+
+    @Override
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
     }
@@ -102,7 +110,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
 
     @Override
     public void onItemClick(View view, int position) {
-
+        mPresenter.pictureClick(position);
     }
 
     @Override

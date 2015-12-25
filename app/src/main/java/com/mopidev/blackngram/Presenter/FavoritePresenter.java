@@ -13,4 +13,6 @@ public interface FavoritePresenter {
     void loadPictures(Intent intent);
 
     void deleteFavorite(UserImage userImage);
+
+    void pictureClick(int position);
 }

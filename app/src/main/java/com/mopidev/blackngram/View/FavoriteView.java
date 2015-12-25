@@ -18,4 +18,6 @@ public interface FavoriteView {
     void setError();
 
     void initRecyclerView();
+
+    void navigateToFullScreen(UserImage userImage);
 }

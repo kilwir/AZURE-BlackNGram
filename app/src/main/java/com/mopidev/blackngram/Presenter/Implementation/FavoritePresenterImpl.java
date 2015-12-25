@@ -47,4 +47,9 @@ public class FavoritePresenterImpl implements FavoritePresenter {
         mUserImages.remove(userImage);
         mView.showPictures(mUserImages);
     }
+
+    @Override
+    public void pictureClick(int position) {
+        mView.navigateToFullScreen(mUserImages.get(position));
+    }
 }
