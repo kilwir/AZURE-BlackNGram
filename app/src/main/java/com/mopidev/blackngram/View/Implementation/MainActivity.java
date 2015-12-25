@@ -1,7 +1,11 @@
 package com.mopidev.blackngram.View.Implementation;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
@@ -27,6 +31,8 @@ import com.mopidev.blackngram.Presenter.MainPresenter;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.MainView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     public static final String TAG = "MainActivity";
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_PICK = 1;
+    static final int REQUEST_IMAGE_PICK = 2;
 
     @Bind(R.id.swipeRefreshLayout)
     public SwipeRefreshLayout mSwipeToRefresh;
@@ -57,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
 
     @Bind(R.id.toolbar)
     public Toolbar mToolbar;
+
+    @Bind(R.id.fab_all)
+    public FloatingActionsMenu mFloatingActionsMenu;
 
     private MainPresenter presenter;
 
@@ -193,5 +202,31 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Override
     public void onRefresh() {
         presenter.loadPictures(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Bitmap imageBitmap = null;
+
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+        } else if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK) {
+            try {
+                Uri selectedImage = data.getData();
+                InputStream imageStream = null;
+                imageStream = getContentResolver().openInputStream(selectedImage);
+                imageBitmap = BitmapFactory.decodeStream(imageStream);
+            } catch (FileNotFoundException e) {
+                this.setError();
+            }
+        }
+
+        if(imageBitmap != null) {
+            presenter.addPicture(imageBitmap);
+        }
+
+        mFloatingActionsMenu.collapse();
     }
 }

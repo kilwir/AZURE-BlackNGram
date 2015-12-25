@@ -1,6 +1,7 @@
 package com.mopidev.blackngram.Presenter.Implementation;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Parcelable;
 import android.util.Log;
 
@@ -52,6 +53,11 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     @Override
     public void pictureClick(int position) {
         mMainView.navigateToFullScreen(mUserImageList.get(position));
+    }
+
+    @Override
+    public void addPicture(Bitmap image) {
+        Log.d(TAG,"addPicture");
     }
 
     @Override

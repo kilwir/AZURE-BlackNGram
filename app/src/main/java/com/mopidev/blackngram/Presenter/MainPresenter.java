@@ -1,6 +1,7 @@
 package com.mopidev.blackngram.Presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Model.UserImage;
@@ -15,6 +16,8 @@ public interface MainPresenter {
     void likePicture(UserImage image);
 
     void pictureClick(int position);
+
+    void addPicture(Bitmap image);
 
     void optionSelected(int id);
 }
