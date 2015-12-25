@@ -3,7 +3,7 @@ package com.mopidev.blackngram.View.Implementation;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mopidev.blackngram.Adapter.PictureAdapter;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.Implementation.MainPresenterImpl;
@@ -40,6 +42,9 @@ import icepick.Icepick;
 public class MainActivity extends AppCompatActivity implements MainView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "MainActivity";
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_PICK = 1;
 
     @Bind(R.id.swipeRefreshLayout)
     public SwipeRefreshLayout mSwipeToRefresh;
@@ -143,6 +148,26 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
         startActivity(favoriteView);
     }
 
+    @OnClick(R.id.fab_picture)
+    @Override
+    public void navigateToCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @OnClick(R.id.fab_picker)
+    @Override
+    public void navigateToPickPicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_PICK);
+        }
+    }
+
     @Override
     public void showPictures(List<UserImage> userImageList) {
         PictureAdapter adapter = new PictureAdapter(getApplicationContext(), userImageList);
@@ -168,10 +193,5 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Override
     public void onRefresh() {
         presenter.loadPictures(true);
-    }
-
-    @OnClick(R.id.fab_add)
-    public void addPicture(View view){
-        Log.d(TAG,"Add picture");
     }
 }
