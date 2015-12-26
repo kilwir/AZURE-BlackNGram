@@ -298,7 +298,7 @@ public class AppDataManager {
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, mCurrentUser.getRowKey());
-                    String BlackUrlFilter = TableQuery.generateFilterCondition("BlackImageURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
+                    String BlackUrlFilter = TableQuery.generateFilterCondition("BlackThumbnailURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
 
                     String combinedFilter = TableQuery.combineFilters(
                             RowKeyFilter, TableQuery.Operators.AND, BlackUrlFilter);
@@ -504,7 +504,7 @@ public class AppDataManager {
                         listener.onDeleteError();
 
                     TableOperation delete = TableOperation.delete(image);
-                    //cloudTable.execute(delete);
+                    cloudTable.execute(delete);
 
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override

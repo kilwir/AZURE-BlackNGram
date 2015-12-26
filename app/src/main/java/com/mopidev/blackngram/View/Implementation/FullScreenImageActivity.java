@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import icepick.Icepick;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Bad Boys Team
@@ -25,6 +26,8 @@ public class FullScreenImageActivity extends AppCompatActivity implements FullSc
     ImageView mImageFullScreen;
 
     private String mPictureGetBlackImageURL;
+
+    private PhotoViewAttacher mAttacher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public class FullScreenImageActivity extends AppCompatActivity implements FullSc
             Picasso.with(this).load(mPictureGetBlackImageURL).into(mImageFullScreen);
         else
             Picasso.with(this).load(R.drawable.in_progress).into(mImageFullScreen);
+
+        mAttacher = new PhotoViewAttacher(mImageFullScreen);
     }
 
     private void hideUI() {

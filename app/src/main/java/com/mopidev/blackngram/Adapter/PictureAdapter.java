@@ -57,7 +57,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         final String anonymous = mContext.getString(R.string.anonymous);
 
         Picasso.with(mContext)
-                .load(userImage.getBlackImageURL())
+                .load(userImage.getBlackThumbnailURL())
                 .error(R.drawable.error_loading)
                 .into(holder.Image);
 
@@ -134,13 +134,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
         @Override
         public void onClick(View view) {
             if (clickListener != null)
-                clickListener.onItemClick(view, getPosition());
+                clickListener.onItemClick(view, getAdapterPosition());
         }
 
         @Override
         public boolean onLongClick(View view) {
             if (clickListener != null)
-                clickListener.onItemLongClick(view, getPosition());
+                clickListener.onItemLongClick(view, getAdapterPosition());
             return true;
         }
     }
