@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import clojure.lang.Cons;
+
 /**
  * Bad Boys Team
  * Created by remyjallan on 26/11/2015.
@@ -490,8 +492,37 @@ public class AppDataManager {
         });
     }
 
-    public void deletePicture(UserImage image,int positon,OnDeletePictureListener listener){
-        listener.onDeleteSuccess(image,positon);
+    public void deletePicture(final UserImage image, final int position, final OnDeletePictureListener listener){
+        //listener.onDeleteSuccess(image,position);
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try{
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
+
+                    if(image.getRowKey() == null)
+                        listener.onDeleteError();
+
+                    TableOperation delete = TableOperation.delete(image);
+                    //cloudTable.execute(delete);
+
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onDeleteSuccess(image, position);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onDeleteError();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 

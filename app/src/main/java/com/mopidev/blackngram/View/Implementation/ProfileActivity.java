@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.View.Implementation;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.mopidev.blackngram.Adapter.PictureAdapter;
 import com.mopidev.blackngram.Adapter.PicturePagerAdapter;
 import com.mopidev.blackngram.Adapter.PictureProfileAdapter;
@@ -123,7 +126,18 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
     }
 
     @Override
-    public void onDeletePicture(UserImage image, int position) {
-        mPresenter.deletePicture(image,position);
+    public void onDeletePicture(final UserImage image, final int position) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.title_dialog_delete_picture)
+                .content(R.string.content_dialog_delete_picture)
+                .positiveText(R.string.positive_dialog_delete_picture)
+                .negativeText(R.string.negative_dialog_delete_picture)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        mPresenter.deletePicture(image,position);
+                    }
+                })
+                .show();
     }
 }

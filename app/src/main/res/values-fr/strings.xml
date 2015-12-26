@@ -26,4 +26,8 @@
     <string name="error_upload_picture">"Erreur d\'envoye de l\'image"</string>
     <string name="anonymous">Anonyme</string>
     <string name="delete_picture">Supprimer la photo</string>
+    <string name="title_dialog_delete_picture">Supprimer la photo ?</string>
+    <string name="content_dialog_delete_picture">Supprimer la photo de Black\'N\'Gram ?</string>
+    <string name="positive_dialog_delete_picture">Supprimer</string>
+    <string name="negative_dialog_delete_picture">Annuler</string>
 </resources>
