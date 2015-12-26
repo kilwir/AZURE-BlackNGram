@@ -99,6 +99,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
     }
 
     @Override
+    public void deletePictureFromRecyclerView(UserImage image, int position) {
+        PictureProfileAdapter adapter = (PictureProfileAdapter) mRecyclerView.getAdapter();
+        adapter.deleteItem(image, position);
+    }
+
+    @Override
     public void navigateToFullScreen(UserImage userImage, PicturePagerAdapter.StateImage currentImage) {
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
 
@@ -114,5 +120,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
     @Override
     public void onItemClick(View view,UserImage userImage,PicturePagerAdapter.StateImage currentImage) {
         this.navigateToFullScreen(userImage,currentImage);
+    }
+
+    @Override
+    public void onDeletePicture(UserImage image, int position) {
+        mPresenter.deletePicture(image,position);
     }
 }

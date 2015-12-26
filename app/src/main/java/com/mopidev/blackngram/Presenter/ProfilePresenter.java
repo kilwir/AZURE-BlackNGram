@@ -8,4 +8,6 @@ import com.mopidev.blackngram.Model.UserImage;
  */
 public interface ProfilePresenter {
     void loadPictures();
+
+    void deletePicture(UserImage image,int position);
 }

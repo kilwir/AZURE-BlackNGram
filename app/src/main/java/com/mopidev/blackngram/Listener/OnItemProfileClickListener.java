@@ -12,4 +12,5 @@ import com.mopidev.blackngram.Model.UserImage;
 
 public interface OnItemProfileClickListener {
     void onItemClick(View view,UserImage userImage,PicturePagerAdapter.StateImage currentImage);
+    void onDeletePicture(UserImage image,int position);
 }

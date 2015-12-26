@@ -12,6 +12,7 @@ import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.mopidev.blackngram.Listener.OnCheckUserExistListener;
+import com.mopidev.blackngram.Listener.OnDeletePictureListener;
 import com.mopidev.blackngram.Listener.OnImageUploadedListener;
 import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoadUserListener;
@@ -487,6 +488,10 @@ public class AppDataManager {
                 }
             }
         });
+    }
+
+    public void deletePicture(UserImage image,int positon,OnDeletePictureListener listener){
+        listener.onDeleteSuccess(image,positon);
     }
 
 

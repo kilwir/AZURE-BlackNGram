@@ -21,5 +21,7 @@ public interface ProfileView {
 
     void showPictures(List<UserImage> userImages);
 
+    void deletePictureFromRecyclerView(UserImage image, int position);
+
     void navigateToFullScreen(UserImage userImage,PicturePagerAdapter.StateImage currentImage);
 }

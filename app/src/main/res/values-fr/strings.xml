@@ -25,4 +25,5 @@
     <string name="on_error_as_occurred">"Une erreur a été rencontré"</string>
     <string name="error_upload_picture">"Erreur d\'envoye de l\'image"</string>
     <string name="anonymous">Anonyme</string>
+    <string name="delete_picture">Supprimer la photo</string>
 </resources>
