@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -60,11 +61,24 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
 
         setSupportActionBar(mToolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mPresenter = new ProfilePresenterImpl(this);
 
         this.initRecyclerView();
 
         mPresenter.loadPictures();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return false;
     }
 
     @Override

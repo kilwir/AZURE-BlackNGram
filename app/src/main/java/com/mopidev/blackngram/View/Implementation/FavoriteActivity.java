@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
 
         setSupportActionBar(mToolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         this.initRecyclerView();
 
         mPresenter = new FavoritePresenterImpl(this);
@@ -66,10 +69,21 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        Icepick.saveInstanceState(this,outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
