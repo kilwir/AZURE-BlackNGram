@@ -448,13 +448,46 @@ public class AppDataManager {
     }
 
     public void loadUserPictures(final OnLoadPicturesFinishedListener listener){
-        ArrayList<UserImage> userImages = new ArrayList<>();
-        userImages.add(new UserImage());
-        userImages.add(new UserImage());
-        userImages.add(new UserImage());
-        userImages.add(new UserImage());
-        userImages.add(new UserImage());
-        listener.onSuccess(userImages);
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                try {
+
+                    CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
+
+                    String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, mCurrentUser.getRowKey());
+
+                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(RowKeyFilter);
+
+                    Iterator<UserImage> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
+
+                    final List<UserImage> userImageList = new ArrayList<>();
+
+                    while (pictureIterator.hasNext()) {
+
+                        UserImage currentImage = pictureIterator.next();
+
+                        userImageList.add(currentImage);
+                    }
+
+
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onSuccess(userImageList);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+                            listener.onError();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 

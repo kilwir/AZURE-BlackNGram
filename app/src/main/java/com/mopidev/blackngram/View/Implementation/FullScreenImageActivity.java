@@ -38,7 +38,10 @@ public class FullScreenImageActivity extends AppCompatActivity implements FullSc
 
         mPictureGetBlackImageURL = getIntent().getStringExtra("PictureGetBlackImageURL");
 
-        Picasso.with(this).load(mPictureGetBlackImageURL).into(mImageFullScreen);
+        if(mPictureGetBlackImageURL != null)
+            Picasso.with(this).load(mPictureGetBlackImageURL).into(mImageFullScreen);
+        else
+            Picasso.with(this).load(R.drawable.in_progress).into(mImageFullScreen);
     }
 
     private void hideUI() {

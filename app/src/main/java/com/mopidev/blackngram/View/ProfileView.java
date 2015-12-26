@@ -1,5 +1,6 @@
 package com.mopidev.blackngram.View;
 
+import com.mopidev.blackngram.Adapter.PicturePagerAdapter;
 import com.mopidev.blackngram.Model.UserImage;
 
 import java.util.ArrayList;
@@ -19,4 +20,6 @@ public interface ProfileView {
     void initRecyclerView();
 
     void showPictures(List<UserImage> userImages);
+
+    void navigateToFullScreen(UserImage userImage,PicturePagerAdapter.StateImage currentImage);
 }
