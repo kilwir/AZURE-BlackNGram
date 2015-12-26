@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mopidev.blackngram.Adapter.PictureAdapter;
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.Implementation.MainPresenterImpl;
 import com.mopidev.blackngram.Presenter.MainPresenter;
@@ -139,13 +140,14 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Override
     public void navigateToFullScreen(UserImage userImage) {
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
-        fullScreen.putExtra("PictureGetBlackImageURL", userImage.getBlackImageURL());
+        fullScreen.putExtra(Constante.NameExtraFullScreenImage, userImage.getBlackImageURL());
         startActivity(fullScreen);
     }
 
     @Override
     public void navigateToLogin() {
         Intent loginView = new Intent(this,LoginActivity.class);
+        loginView.putExtra(Constante.NameExtraLoginDisconnect,true);
         startActivity(loginView);
         finish();
     }
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
     @Override
     public void navigateToFavorite(ArrayList<UserImage> favoriteImage) {
         Intent favoriteView = new Intent(this,FavoriteActivity.class);
-        favoriteView.putParcelableArrayListExtra("favoriteImage",favoriteImage);
+        favoriteView.putParcelableArrayListExtra(Constante.NameExtraFavoriteImages,favoriteImage);
         startActivity(favoriteView);
     }
 
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MainView, SwipeRe
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_PICK);
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture)), REQUEST_IMAGE_PICK);
         }
     }
 

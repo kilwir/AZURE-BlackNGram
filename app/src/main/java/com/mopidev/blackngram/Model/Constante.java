@@ -24,6 +24,14 @@ public class Constante {
      */
     public static String NameBlobImage = "images";
 
+    /**
+     *  Application String
+     */
+
+    public static String NameExtraFullScreenImage = "pictureUrl";
+    public static String NameExtraFavoriteImages = "favoritesImage";
+    public static String NameExtraLoginDisconnect = "isDisconnect";
+
     public static String getStorageConnectionString() {
         return  "DefaultEndpointsProtocol=http;" +
                 "AccountName=" + AzureAccountName + ";" +

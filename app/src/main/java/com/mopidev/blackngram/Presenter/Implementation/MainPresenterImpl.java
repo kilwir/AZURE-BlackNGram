@@ -2,6 +2,7 @@ package com.mopidev.blackngram.Presenter.Implementation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -106,8 +107,7 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
     @Override
     public void onError() {
         mMainView.hideProgress();
-        mMainView.setError("On error as occurred");
-        Log.d(TAG,"onError");
+        mMainView.setError(Resources.getSystem().getString(R.string.on_error_as_occurred));
     }
 
     @Override
@@ -117,6 +117,6 @@ public class MainPresenterImpl implements MainPresenter,OnLoadPicturesFinishedLi
 
     @Override
     public void onImageUploadError() {
-        mMainView.setError("Error upload image");
+        mMainView.setError(Resources.getSystem().getString(R.string.error_upload_picture));
     }
 }

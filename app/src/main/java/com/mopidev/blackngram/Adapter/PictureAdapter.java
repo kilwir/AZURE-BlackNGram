@@ -54,6 +54,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     public void onBindViewHolder(final PictureViewHolder holder, final int position) {
         final UserImage userImage = mUserImageList.get(position);
         final String by = mContext.getString(R.string.by);
+        final String anonymous = mContext.getString(R.string.anonymous);
 
         Picasso.with(mContext)
                 .load(userImage.getBlackImageURL())
@@ -68,7 +69,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
             @Override
             public void OnError() {
-                holder.Author.setText(by + "Anonymous");
+                holder.Author.setText(by + anonymous);
             }
         });
 

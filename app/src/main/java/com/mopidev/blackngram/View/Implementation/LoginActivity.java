@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.Presenter.Implementation.LoginPresenterImpl;
 import com.mopidev.blackngram.Presenter.LoginPresenter;
 import com.mopidev.blackngram.R;
@@ -45,7 +46,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         presenter = new LoginPresenterImpl(this);
 
-        presenter.checkCurrentUser(getApplicationContext());
+        boolean isDisconnect = getIntent().getBooleanExtra(Constante.NameExtraLoginDisconnect,false);
+
+        if (!isDisconnect)
+            presenter.checkCurrentUser(getApplicationContext());
     }
 
     @Override
@@ -71,14 +75,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void navigateToHome() {
-        Log.d(TAG,"Navigate to home");
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
     @OnClick(R.id.loginButton)
     public void loginButton(){
-        Log.d(TAG, "LoginButton Pressed");
         this.presenter.validateCredentials(this.username.getText().toString(), this.password.getText().toString(), getApplicationContext());
     }
 

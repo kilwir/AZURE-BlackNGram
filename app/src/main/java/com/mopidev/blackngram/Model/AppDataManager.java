@@ -235,6 +235,9 @@ public class AppDataManager {
     }
 
     private void saveCurrentUser(User user,Context context) {
+
+        mCurrentUser = user;
+
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
 
@@ -243,8 +246,6 @@ public class AppDataManager {
         editor.putString(PREFERENCE_NAME_ROWKEY, user.getRowKey());
 
         editor.apply();
-
-        mCurrentUser = user;
     }
 
     public void getCurrentUser(Context context,OnLoginFinishedListener listener){
@@ -365,7 +366,6 @@ public class AppDataManager {
                         TableOperation insertNewFavorite = TableOperation.insert(newFavorite);
 
                         cloudTable.execute(insertNewFavorite);
-                        Log.d(TAG, "Favorite Added");
                     } catch( Exception e) {
                         Log.d(TAG, "Exception addFavorite");
                     }
@@ -398,7 +398,6 @@ public class AppDataManager {
                         cloudTable.execute(delete);
                     }
 
-                    Log.d(TAG, "Favorite delete");
                 } catch (Exception e) {
                     Log.d(TAG, e.getMessage());
                 }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.mopidev.blackngram.Adapter.PictureAdapter;
 import com.mopidev.blackngram.Listener.OnItemClickListener;
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.FavoritePresenter;
 import com.mopidev.blackngram.Presenter.Implementation.FavoritePresenterImpl;
@@ -81,7 +82,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
     @Override
     public void navigateToFullScreen(UserImage userImage) {
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
-        fullScreen.putExtra("PictureGetBlackImageURL", userImage.getBlackImageURL());
+        fullScreen.putExtra(Constante.NameExtraFullScreenImage, userImage.getBlackImageURL());
         startActivity(fullScreen);
     }
 
@@ -104,7 +105,7 @@ public class FavoriteActivity extends AppCompatActivity implements FavoriteView,
 
     @Override
     public void setError() {
-        Toast.makeText(getApplicationContext(), "Error load pictures", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.error_load_pictures), Toast.LENGTH_SHORT).show();
     }
 
     @Override

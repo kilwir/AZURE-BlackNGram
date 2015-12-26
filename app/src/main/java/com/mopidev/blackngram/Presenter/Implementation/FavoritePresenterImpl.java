@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.mopidev.blackngram.Model.AppDataManager;
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.FavoritePresenter;
 import com.mopidev.blackngram.R;
@@ -36,7 +37,7 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     @Override
     public void loadPictures(Intent intent) {
         mView.showProgress();
-        mUserImages = intent.getParcelableArrayListExtra("favoriteImage");
+        mUserImages = intent.getParcelableArrayListExtra(Constante.NameExtraFavoriteImages);
         mView.showPictures(mUserImages);
         mView.hideProgress();
     }

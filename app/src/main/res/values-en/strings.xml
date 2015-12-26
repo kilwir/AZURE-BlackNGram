@@ -1,21 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Black\'N\'Gram</string>
-    <string name="username_error">Wrong Username</string>
-    <string name="user_name">Username</string>
-    <string name="login">Login</string>
-    <string name="contentDescriptionPicture">Image</string>
-    <string name="Share">Share</string>
-    <string name="by">"By "</string>
-    <string name="signin">Sign in</string>
-    <string name="password">Password</string>
+    <string name="FavoriteTitleActivity">My Favorite</string>
     <string name="Like">Like</string>
-    <string name="logout">Logout</string>
-    <string name="favorite">Favorite</string>
     <string name="LoginTitleActivity">Login</string>
     <string name="MainTitleActivity">Black\'N\'Gram</string>
-    <string name="FavoriteTitleActivity">My Favorite</string>
-    <string name="profile">Profile</string>
+    <string name="Share">Share</string>
+    <string name="by">"by "</string>
+    <string name="contentDescriptionPicture">Image</string>
+    <string name="favorite">Favorite</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
+    <string name="password">Password</string>
+    <string name="profile">Profile</string>
+    <string name="signin">Sign in</string>
+    <string name="user_name">Username</string>
+    <string name="username_error">Wrong Username</string>
     <string name="user_already_exist">User already exist</string>
     <string name="wrong_credential">Wrong Username/Password</string>
     <string name="error_connection">Error connection</string>
@@ -23,5 +24,5 @@
     <string name="select_picture">Select picture</string>
     <string name="on_error_as_occurred">On error as occurred</string>
     <string name="error_upload_picture">Error upload picture</string>
-    <string name="anonymous">anonymous</string>
+    <string name="anonymous">Anonymous</string>
 </resources>

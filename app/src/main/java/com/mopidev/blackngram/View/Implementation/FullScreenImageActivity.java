@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.R;
 import com.mopidev.blackngram.View.FullScreenImageView;
 import com.squareup.picasso.Picasso;
@@ -36,7 +37,7 @@ public class FullScreenImageActivity extends AppCompatActivity implements FullSc
 
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        mPictureGetBlackImageURL = getIntent().getStringExtra("PictureGetBlackImageURL");
+        mPictureGetBlackImageURL = getIntent().getStringExtra(Constante.NameExtraFullScreenImage);
 
         if(mPictureGetBlackImageURL != null)
             Picasso.with(this).load(mPictureGetBlackImageURL).into(mImageFullScreen);

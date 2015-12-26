@@ -15,6 +15,7 @@ import com.mopidev.blackngram.Adapter.PictureAdapter;
 import com.mopidev.blackngram.Adapter.PicturePagerAdapter;
 import com.mopidev.blackngram.Adapter.PictureProfileAdapter;
 import com.mopidev.blackngram.Listener.OnItemProfileClickListener;
+import com.mopidev.blackngram.Model.Constante;
 import com.mopidev.blackngram.Model.UserImage;
 import com.mopidev.blackngram.Presenter.Implementation.ProfilePresenterImpl;
 import com.mopidev.blackngram.R;
@@ -102,10 +103,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
         Intent fullScreen = new Intent(this,FullScreenImageActivity.class);
 
         if(currentImage == PicturePagerAdapter.StateImage.BLACK_IMAGE){
-            fullScreen.putExtra("PictureGetBlackImageURL", userImage.getBlackImageURL());
+            fullScreen.putExtra(Constante.NameExtraFullScreenImage, userImage.getBlackImageURL());
         }
         else
-            fullScreen.putExtra("PictureGetBlackImageURL", userImage.getImageURL());
+            fullScreen.putExtra(Constante.NameExtraFullScreenImage, userImage.getImageURL());
 
         startActivity(fullScreen);
     }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Black\'N\'Gram</string>
+    <string name="FavoriteTitleActivity">Mes favoris</string>
+    <string name="Like">"J\'aime"</string>
+    <string name="LoginTitleActivity">Connection</string>
+    <string name="MainTitleActivity">Black\'N\'Gram</string>
+    <string name="Share">Partager</string>
+    <string name="by">"par "</string>
+    <string name="contentDescriptionPicture">Image</string>
+    <string name="favorite">Favoris</string>
+    <string name="login">Connexion</string>
+    <string name="logout">Déconnexion</string>
+    <string name="my_profile">Mon Profil</string>
+    <string name="password">Mot de passe</string>
+    <string name="profile">Profil</string>
+    <string name="signin">"S\'enregistrer"</string>
+    <string name="user_name">"Nom d\'utilisateur"</string>
+    <string name="username_error">"Mauvais nom d\'utilisateur"</string>
+    <string name="user_already_exist">"Nom d\'utilisateur déjà existant"</string>
+    <string name="wrong_credential">"Mauvais Nom d\'utilisateur/Mot de passe"</string>
+    <string name="error_connection">Erreur de connexion</string>
+    <string name="error_load_pictures">Erreur durant le chargement des photos</string>
+    <string name="select_picture">Choisissez une image</string>
+    <string name="on_error_as_occurred">"Une erreur a été rencontré"</string>
+    <string name="error_upload_picture">"Erreur d\'envoye de l\'image"</string>
+    <string name="anonymous">Anonyme</string>
+</resources>

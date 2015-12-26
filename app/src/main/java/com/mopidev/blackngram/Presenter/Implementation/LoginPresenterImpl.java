@@ -52,14 +52,12 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
 
     @Override
     public void onLoginError(int errorCode) {
-        Log.d(TAG,"onError");
         loginView.hideProgress();
         loginView.setError(ErrorCode.getMessage(errorCode));
     }
 
     @Override
     public void onLoginSuccess(User currentUser) {
-        Log.d(TAG,"onSuccess");
         loginView.hideProgress();
         loginView.navigateToHome();
     }
@@ -67,14 +65,12 @@ public class LoginPresenterImpl implements LoginPresenter,OnLoginFinishedListene
 
     @Override
     public void onSigninError(int errorCode) {
-        Log.d(TAG,"onSigninError");
         loginView.hideProgress();
         loginView.setError(ErrorCode.getMessage(errorCode));
     }
 
     @Override
     public void onSigninSuccess(User currentUser) {
-        Log.d(TAG,"onSigninSuccess");
         loginView.hideProgress();
         loginView.navigateToHome();
     }
