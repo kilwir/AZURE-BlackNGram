@@ -30,8 +30,9 @@ public class ProfilePresenterImpl implements ProfilePresenter, OnLoadPicturesFin
     }
 
     @Override
-    public void loadPictures() {
-        mView.showProgress();
+    public void loadPictures(boolean isRefresh) {
+        if( !isRefresh)
+            mView.showProgress();
         AppDataManager.getInstance().loadUserPictures(this);
     }
 

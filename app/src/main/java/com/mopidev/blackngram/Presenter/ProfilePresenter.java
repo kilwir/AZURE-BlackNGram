@@ -7,7 +7,7 @@ import com.mopidev.blackngram.Model.UserImage;
  * Created by remyjallan on 25/12/2015.
  */
 public interface ProfilePresenter {
-    void loadPictures();
+    void loadPictures(boolean isRefresh);
 
     void deletePicture(UserImage image,int position);
 }

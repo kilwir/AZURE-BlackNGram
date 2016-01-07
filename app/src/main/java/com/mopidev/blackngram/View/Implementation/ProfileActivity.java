@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +36,7 @@ import icepick.Icepick;
  * Bad Boys Team
  * Created by remyjallan on 25/12/2015.
  */
-public class ProfileActivity extends AppCompatActivity implements ProfileView, OnItemProfileClickListener {
+public class ProfileActivity extends AppCompatActivity implements ProfileView, OnItemProfileClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "ProfileActivity";
 
@@ -50,6 +51,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
     @Bind(R.id.progressLoadPicture)
     public ProgressBar mProgressBar;
 
+    @Bind(R.id.swipeRefreshLayout)
+    public SwipeRefreshLayout mSwipeToRefresh;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +67,13 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mSwipeToRefresh.setOnRefreshListener(this);
+
         mPresenter = new ProfilePresenterImpl(this);
 
         this.initRecyclerView();
 
-        mPresenter.loadPictures();
+        mPresenter.loadPictures(false);
     }
 
     @Override
@@ -95,6 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
     @Override
     public void hideProgress() {
         mProgressBar.setVisibility(View.GONE);
+        mSwipeToRefresh.setRefreshing(false);
     }
 
     @Override
@@ -153,5 +160,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView, O
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.loadPictures(true);
     }
 }

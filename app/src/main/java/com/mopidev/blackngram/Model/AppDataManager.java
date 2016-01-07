@@ -512,7 +512,7 @@ public class AppDataManager {
 
                     image.setIsDeleted(true);
 
-                    TableOperation deleteImage = TableOperation.insertOrMerge(image);
+                    TableOperation deleteImage = TableOperation.replace(image);
                     cloudTable.execute(deleteImage);
 
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
