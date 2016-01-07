@@ -19,6 +19,7 @@ public class UserImage extends TableServiceEntity implements Parcelable{
     private String mThumbnailURL;
     private String mBlackImageURL;
     private String mBlackThumbnailURL;
+    private boolean mIsDeleted;
 
     public Boolean IsFavorite;
 
@@ -79,6 +80,14 @@ public class UserImage extends TableServiceEntity implements Parcelable{
 
     public void setBlackImageURL(String blackImageURL) {
         mBlackImageURL = blackImageURL;
+    }
+
+    public boolean getIsDeleted() {
+        return mIsDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        mIsDeleted = isDeleted;
     }
 
     @Override

@@ -299,11 +299,14 @@ public class AppDataManager {
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.NOT_EQUAL, mCurrentUser.getRowKey());
                     String BlackUrlFilter = TableQuery.generateFilterCondition("BlackThumbnailURL", TableQuery.QueryComparisons.NOT_EQUAL, "");
+                    String IsDeletedFilter = TableQuery.generateFilterCondition("IsDeleted",TableQuery.QueryComparisons.EQUAL,false);
 
                     String combinedFilter = TableQuery.combineFilters(
                             RowKeyFilter, TableQuery.Operators.AND, BlackUrlFilter);
 
-                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(combinedFilter);
+                    String finalFilter = TableQuery.combineFilters(combinedFilter,TableQuery.Operators.AND,IsDeletedFilter);
+
+                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(finalFilter);
 
                     Iterator<UserImage> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
 
@@ -426,6 +429,7 @@ public class AppDataManager {
                     UserImage newImage = new UserImage();
                     newImage.setUserRowKey(getCurrentUser().getRowKey());
                     newImage.setImageURL(blob.getStorageUri().getPrimaryUri().toString());
+                    newImage.setIsDeleted(false);
 
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
                     TableOperation insertNewFavorite = TableOperation.insert(newImage);
@@ -458,8 +462,12 @@ public class AppDataManager {
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
 
                     String RowKeyFilter = TableQuery.generateFilterCondition("UserRowKey", TableQuery.QueryComparisons.EQUAL, mCurrentUser.getRowKey());
+                    String IsDeletedFilter = TableQuery.generateFilterCondition("IsDeleted",TableQuery.QueryComparisons.EQUAL,false);
 
-                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(RowKeyFilter);
+                    String combinedFilter = TableQuery.combineFilters(
+                            RowKeyFilter, TableQuery.Operators.AND, IsDeletedFilter);
+
+                    TableQuery<UserImage> pictureTableQuery = TableQuery.from(UserImage.class).where(combinedFilter);
 
                     Iterator<UserImage> pictureIterator = cloudTable.execute(pictureTableQuery).iterator();
 
