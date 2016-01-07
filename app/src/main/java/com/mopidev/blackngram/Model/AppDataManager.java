@@ -8,6 +8,9 @@ import android.util.Log;
 import com.arasthel.asyncjob.AsyncJob;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.microsoft.azure.storage.queue.CloudQueue;
+import com.microsoft.azure.storage.queue.CloudQueueClient;
+import com.microsoft.azure.storage.queue.CloudQueueMessage;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
@@ -18,6 +21,8 @@ import com.mopidev.blackngram.Listener.OnLoadPicturesFinishedListener;
 import com.mopidev.blackngram.Listener.OnLoadUserListener;
 import com.mopidev.blackngram.Listener.OnLoginFinishedListener;
 import com.mopidev.blackngram.Listener.OnSigninFinishedListener;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -434,6 +439,12 @@ public class AppDataManager {
                     CloudTable cloudTable = DataHelper.getCloudTable(Constante.NameTablePicture);
                     TableOperation insertNewFavorite = TableOperation.insert(newImage);
                     cloudTable.execute(insertNewFavorite);
+
+                    CloudQueue queue = DataHelper.getCloudQueue(Constante.QueueBlobName);
+
+                    CloudQueueMessage message = new CloudQueueMessage(DataHelper.getJsonQueue(blob,newImage));
+
+                    queue.addMessage(message);
 
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override

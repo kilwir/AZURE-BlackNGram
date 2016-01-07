@@ -24,6 +24,12 @@ public class Constante {
      */
     public static String NameBlobImage = "images";
 
+
+    /**
+     * Queue Name
+     */
+    public static String QueueBlobName = "thumbnailrequest";
+
     /**
      *  Application String
      */
