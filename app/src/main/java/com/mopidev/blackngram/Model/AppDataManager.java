@@ -501,7 +501,6 @@ public class AppDataManager {
     }
 
     public void deletePicture(final UserImage image, final int position, final OnDeletePictureListener listener){
-        //listener.onDeleteSuccess(image,position);
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
@@ -511,8 +510,10 @@ public class AppDataManager {
                     if(image.getRowKey() == null)
                         listener.onDeleteError();
 
-                    TableOperation delete = TableOperation.delete(image);
-                    cloudTable.execute(delete);
+                    image.setIsDeleted(true);
+
+                    TableOperation deleteImage = TableOperation.insertOrMerge(image);
+                    cloudTable.execute(deleteImage);
 
                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                         @Override
