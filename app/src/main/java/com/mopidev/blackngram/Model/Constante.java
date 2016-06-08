@@ -5,12 +5,12 @@ package com.mopidev.blackngram.Model;
  * Created by remyjallan on 03/12/2015.
  */
 public class Constante {
-    public static String AzureAccountName = "blackngram";
-    public static String AzureAccountAccessKey = "yqki9JL7AzfpQQow6uInDN4pmpAxg/bVJR1/f0lYe4NFlrVGlRlUEKVb8pjrKNc6MWSuKJSWOJiIYR00nxWjSQ==";
+    public static String AzureAccountName = "YOUR_ACCOUNT_NAME";
+    public static String AzureAccountAccessKey = "YOUR_ACCOUNT_ACCESS_KEY";
     public static String ServiceBusEndPoint = "sb://blackngram.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAcc essKey=Rn5y2kB7ep3hTYSrpDlVP37kmzN8o7vA6JenV5d1mk0=";
     public static String ConnectionString = "UseDevelopmentStorage=true;";
 
-    public static String PartitionKey = "INGESUP";
+    public static String PartitionKey = "YOUR_PARTITION_KEY";
 
     /**
      * Table Name
